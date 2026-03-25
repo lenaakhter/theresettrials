@@ -15,16 +15,25 @@
 
     <div class="site-nav-mobile__menu">
         <a href="/" class="site-nav-bar__link">Home</a>
+        <a href="/blogs" class="site-nav-bar__link">Blogs</a>
         <a href="/about" class="site-nav-bar__link">About</a>
-        <a href="/shop" class="site-nav-bar__link">Shop</a>
-        <a href="/contact" class="site-nav-bar__link">Contact</a>
-        <a href="/join" class="c-button c-button--gooey">Join Us
-            <div class="c-button__blobs">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </a>
+        <a href="/disclaimer" class="site-nav-bar__link">Disclaimer</a>
+        <a href="/resources" class="site-nav-bar__link">Links &amp; Resources</a>
+        @auth
+            <a href="{{ route('profile.edit') }}" class="site-nav-bar__link">Profile</a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="c-button c-button--gooey">Log out
+                    <div class="c-button__blobs">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="site-nav-bar__link">Log in</a>
+        @endauth
     </div>
 
     <div class="site-nav-desktop">
@@ -36,19 +45,34 @@
 
         <div class="site-nav-bar__links">
             <a href="/" class="site-nav-bar__link">Home</a>
+            <a href="/blogs" class="site-nav-bar__link">Blogs</a>
             <a href="/about" class="site-nav-bar__link">About</a>
-            <a href="/shop" class="site-nav-bar__link">Shop</a>
-            <a href="/contact" class="site-nav-bar__link">Contact</a>
+            <a href="/disclaimer" class="site-nav-bar__link">Disclaimer</a>
+            <a href="/resources" class="site-nav-bar__link">Links &amp; Resources</a>
         </div>
 
         <div class="join-us">
-            <a href="/join" class="c-button c-button--gooey">Join Us
-                <div class="c-button__blobs">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </a>
+            @auth
+                <a href="{{ route('profile.edit') }}" class="site-nav-bar__link">Profile</a>
+                <form method="POST" action="{{ route('logout') }}" class="site-nav-logout-form">
+                    @csrf
+                    <button type="submit" class="c-button c-button--gooey">Log out
+                        <div class="c-button__blobs">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="c-button c-button--gooey">Log in
+                    <div class="c-button__blobs">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </a>
+            @endauth
         </div>
     </div>
 </nav>

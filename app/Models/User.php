@@ -20,8 +20,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'display_name',
         'email',
         'password',
+        'is_admin',
+        'profile_photo',
     ];
 
     /**
@@ -44,6 +47,22 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function commentLikes()
+    {
+        return $this->hasMany(CommentLike::class);
+    }
+
+    public function getCommentNameAttribute(): string
+    {
+        return $this->display_name ?: $this->name;
     }
 }

@@ -624,6 +624,7 @@ base colours
 .comments-section__login-hint a,
 .comment-item__login-hint a {
     color: #c56a7f;
+    text-decoration: none;
 }
 
 .reader-auth__divider {

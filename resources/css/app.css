@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#app,
+#root {
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+/*
+Colours
+Pinks
+#c56a7f (logo colour)
+#CFA3AD (pink)
+#A6757F (darker pink)
+#8C7B7F (Accent beige)
+
+Greys light to dark
+#BDBDBD
+#8A8A8A
+#5A5A5A
+#2B2B2B
+
+base colours
+#F7F3F4 (beige-ish)
+#FFFFFF (white)
+#F7F3F4 (pale pink)
+
+*/
+
+.site-nav-bar {
+    background-color: #EDE7E9;
+    height: 80px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.site-nav-bar__logo {
+    grid-area: 1 / 1 / 2 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 1rem;
+}
+
+.site-nav-bar__logo-image {
+    height: 60px;
+    width: auto;
+}
+
+.site-nav-bar__links {
+    grid-area: 1 / 2 / 2 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.site-nav-bar__link {
+    text-decoration: none;
+    color: #1b1b18;
+}
+
+.site-nav-bar__link:hover {
+    text-decoration: underline;
+}
+
+.join-us {
+    grid-area: 1 / 3 / 2 / 4;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 1rem;
+}
+
+.join-us__button {
+    padding: 0.5rem 1rem;
+    background-color: #f53003;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.25rem;
+}
+
+.app-body {
+    background-color: #FDFDFC;
+    color: #1b1b18;
+    min-height: 100vh;
+    margin: 0 !important;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+
+.app-main {
+    padding: 0;
+    margin: 0;
+}
+
+.app-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.app-text {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+}
+
+.app-link {
+    color: #f53003;
+    text-decoration: underline;
+}

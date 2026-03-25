@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/*
+Colours
+Pinks
+#CFA3AD (pink)
+#A6757F (darker pink)
+#8C7B7F (Accent beige)
+
+Greys light to dark
+#BDBDBD
+#8A8A8A
+#5A5A5A
+#2B2B2B
+
+base colours
+#F7F3F4 (beige-ish)
+#FFFFFF (white)
+#F7F3F4 (pale pink)
+
+*/
+
+/* RESET (fixes your gap issue) */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+/* NAVBAR */
+.site-nav-bar {
+    background-color: #EDE7E9;
+    height: 80px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    width: 100%;
+}
+
+/* LOGO */
+.site-nav-bar__logo {
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+}
+
+.site-nav-bar__logo-image {
+    height: 60px;
+}
+
+/* LINKS */
+.site-nav-bar__links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.site-nav-bar__link {
+    text-decoration: none;
+    color: #1b1b18;
+}
+
+.site-nav-bar__link:hover {
+    text-decoration: underline;
+}
+
+/* BUTTON */
+.join-us {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem;
+}
+
+.join-us__button {
+    padding: 0.5rem 1rem;
+    background-color: #f53003;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+/* PAGE CONTENT */
+.app-main {
+    padding: 1.5rem;
+}
+
+.app-title {
+    margin-top: 0; /* prevents gap under navbar */
+    font-size: 2rem;
+}
+
+.app-text {
+    margin-top: 0;
+}

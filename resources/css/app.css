@@ -615,6 +615,15 @@ base colours
     color: #9a4e61;
 }
 
+.reader-auth__success {
+    margin: 0.75rem 0;
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    color: #2e7d32;
+}
+
 .reader-auth__switch {
     margin: 0.9rem 0 0;
     color: #5A5A5A;

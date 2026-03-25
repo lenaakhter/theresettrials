@@ -54,6 +54,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
     Route::get('/auth/facebook', [SocialAuthController::class, 'redirectToFacebook'])->name('login.facebook');
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
+
+    // Password reset routes
+    Route::get('/forgot-password', [ReaderAuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [ReaderAuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [ReaderAuthController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/reset-password', [ReaderAuthController::class, 'resetPassword'])->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {

@@ -6,6 +6,10 @@
         <h1 class="reader-auth__title">Log in</h1>
         <p class="reader-auth__subtitle">Log in to comment and reply on blog posts.</p>
 
+        @if (session('status'))
+            <div class="reader-auth__success">{{ session('status') }}</div>
+        @endif
+
         @if ($errors->any())
             <div class="reader-auth__error">{{ $errors->first() }}</div>
         @endif
@@ -23,6 +27,10 @@
                 <input type="checkbox" name="remember" value="1">
                 <span>Remember me</span>
             </label>
+
+            <p class="reader-auth__switch" style="margin-top:0; margin-bottom:0.75rem;">
+                <a href="{{ route('password.request') }}">Forgot your password?</a>
+            </p>
 
             <button type="submit" class="admin-form__button">Log in</button>
         </form>

@@ -1,4 +1,7 @@
+@import 'tailwindcss';
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap');
+
+
 
 html,
 body {
@@ -6,6 +9,7 @@ body {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Quicksand', sans-serif;
+    background-color: #F7F3F4;
 }
 
 #app,
@@ -174,10 +178,10 @@ base colours
 }
 
 .c-button--gooey {
-    color: #c56a7f;
+    color: #A6757F;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border: 2px solid #c56a7f;
+    border: 2px solid #A6757F;
     border-radius: 20px;
     position: relative;
     transition: all 700ms ease;
@@ -236,13 +240,14 @@ base colours
 }
 
 .app-body {
-    background-color: #FDFDFC;
+    background-color: #F7F3F4;
     color: #1b1b18;
     min-height: 100vh;
     margin: 0 !important;
     padding: 0;
     font-family: 'Quicksand', sans-serif;
 }
+
 
 .app-main {
     padding: 0;
@@ -274,6 +279,7 @@ base colours
     align-items: flex-end;
     min-height: 420px;
     overflow: hidden;
+    padding-top: 1.25rem;
     padding-bottom: 50px;
 }
 
@@ -328,18 +334,16 @@ base colours
 .hero__title {
     font-size: 3.8rem;
     font-weight: 800;
-    color: #c56a7f;
+    color: #A6757F;
     font-family: 'Playfair Display', serif;
     line-height: 1.1;
-    margin: 0 0 1.4rem 0;
-    overflow-wrap: break-word;
-    word-break: break-word;
+    padding-right:1rem;
 }
 
 .hero__subtitle {
     font-size: 0.95rem;
     color: #8C7B7F;
-    max-width: 560px;
+    max-width: 400px;
     line-height: 1.7;
     margin: 0;
     font-family: 'Quicksand', sans-serif;
@@ -353,6 +357,210 @@ base colours
     height: 90px;
     width: auto;
     opacity: 0.55;
+}
+
+.latest-posts {
+    background: #F7F3F4;
+    padding: 2.5rem 1.25rem 3rem;
+}
+
+.latest-posts__header {
+    max-width: 1200px;
+    margin: 0 auto 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.latest-posts__title {
+    margin: 0;
+    font-size: 2rem;
+    color: #c56a7f;
+    font-family: 'Playfair Display', serif;
+}
+
+.latest-posts__view-all {
+    text-decoration: none;
+    color: #8C7B7F;
+    font-weight: 700;
+}
+
+.latest-posts__view-all:hover {
+    color: #c56a7f;
+}
+
+.latest-posts__empty {
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #8C7B7F;
+}
+
+.latest-posts__track {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(260px, 1fr);
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+}
+
+.latest-post {
+    background: #EFE8EB;
+    border: 1px solid #E2D9DD;
+    border-radius: 16px;
+    overflow: hidden;
+    scroll-snap-align: start;
+    min-height: 100%;
+}
+
+.latest-post__image-wrap {
+    display: block;
+    aspect-ratio: 16 / 9;
+    background: #E7DDE1;
+}
+
+.latest-post__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.latest-post__body {
+    padding: 1rem;
+}
+
+.latest-post__meta {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    color: #8C7B7F;
+}
+
+.latest-post__title {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.35;
+    font-family: 'Playfair Display', serif;
+}
+
+.latest-post__title a {
+    color: #c56a7f;
+    text-decoration: none;
+}
+
+.latest-post__title a:hover {
+    color: #A6757F;
+}
+
+.latest-post__excerpt {
+    margin: 0.65rem 0 0;
+    color: #5A5A5A;
+    line-height: 1.6;
+    font-size: 0.93rem;
+}
+
+.blog-index,
+.post-single {
+    background: #F7F3F4;
+    padding: 2.5rem 1.25rem 3rem;
+}
+
+.blog-index__header,
+.posts-grid,
+.blog-pagination,
+.post-single__inner {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.blog-index__title,
+.post-single__title {
+    margin: 0;
+    color: #c56a7f;
+    font-family: 'Playfair Display', serif;
+}
+
+.blog-index__subtitle {
+    margin: 0.75rem 0 0;
+    color: #8C7B7F;
+}
+
+.posts-grid {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.post-card {
+    background: #EFE8EB;
+    border: 1px solid #E2D9DD;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.post-card__image-wrap {
+    display: block;
+    aspect-ratio: 16 / 9;
+    background: #E7DDE1;
+}
+
+.post-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.post-card__body {
+    padding: 1rem;
+}
+
+.post-card__meta,
+.post-single__meta {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    color: #8C7B7F;
+}
+
+.post-card__title {
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+}
+
+.post-card__title a {
+    text-decoration: none;
+    color: #c56a7f;
+}
+
+.post-card__excerpt {
+    margin: 0.65rem 0 0;
+    color: #5A5A5A;
+    line-height: 1.6;
+}
+
+.post-single__image {
+    width: 100%;
+    max-height: 460px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-top: 1rem;
+}
+
+.post-single__content {
+    margin-top: 1rem;
+    color: #2B2B2B;
+    line-height: 1.9;
+}
+
+.latest-posts--compact {
+    padding-top: 0;
 }
 
 @media (max-width: 767px) {
@@ -378,7 +586,7 @@ base colours
     }
 
     .hero__character-img {
-        height: 220px;
+        height: 250px;
     }
 
     .hero__content {
@@ -393,6 +601,10 @@ base colours
 
     .hero__title {
         font-size: 2.5rem;
+    }
+
+    .latest-posts__title {
+        font-size: 1.6rem;
     }
 
     .hero__wave {

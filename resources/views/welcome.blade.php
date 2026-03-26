@@ -48,4 +48,22 @@
         </div>
     @endif
 </section>
+
+<section class="about-blog">
+    <div class="about-blog__inner">
+        <div class="about-blog__content">
+            <div class="about-blog__text-box">
+            <h2 class="about-blog__title">About This Blog</h2>
+            <p>I started this blog to build a space where I can share and understand what actually works for PCOS beyond just medical advice. From my experience, most of the support I’ve received has been limited to prescriptions like birth control or diabetes medication, without much guidance on what to do beyond that.</p>
+            <p>PCOS feels like so much more than just taking medication. It's something that requires real lifestyle changes, consistency, and care. For someone like me, who prefers a low-maintenance lifestyle, that’s been a challenge. You want to invest in yourself and feel better, but it’s hard to know what’s genuinely worth it.</p>
+            <p>There's so much advice online, but a lot of it feels driven by trends or marketing rather than what actually works. This blog is where I test things for myself, honestly and without filters, to figure out what truly makes a difference.</p>
+            <p>I also hope to create something that helps others like me, who want a realistic, low-maintenance approach to managing PCOS while still feeling better in themselves.</p>
+            </div>
+        </div>
+
+        <div class="about-blog__image-wrap">
+            <img src="{{ asset('images/medicine.png') }}" alt="Medicine illustration" class="about-blog__image">
+        </div>
+    </div>
+</section>
 @endsection

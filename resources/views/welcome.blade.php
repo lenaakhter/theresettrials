@@ -66,4 +66,77 @@
         </div>
     </div>
 </section>
+
+<section class="exploring-map">
+    <div class="exploring-map__header">
+        <h2 class="exploring-map__title">What I'm Exploring</h2>
+        <p class="exploring-map__subtitle">Tap a branch to jump into posts for that area.</p>
+    </div>
+
+    <div class="exploring-map__canvas">
+        <svg viewBox="0 0 1000 620" class="exploring-map__svg" role="img" aria-label="Mind map of topics being explored">
+            <path class="exploring-map__line" d="M500 310 C365 280, 285 220, 210 150" />
+            <path class="exploring-map__line" d="M500 310 C360 315, 275 315, 180 305" />
+            <path class="exploring-map__line" d="M500 310 C365 360, 285 440, 210 510" />
+            <path class="exploring-map__line" d="M500 310 C635 275, 720 215, 810 150" />
+            <path class="exploring-map__line" d="M500 310 C640 315, 730 320, 820 310" />
+            <path class="exploring-map__line" d="M500 310 C635 365, 720 445, 810 510" />
+
+            <foreignObject x="376" y="212" width="248" height="196">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node exploring-map__node--center">
+                    What I'm Exploring
+                </div>
+            </foreignObject>
+
+            <foreignObject x="118" y="86" width="210" height="110">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--left">
+                    <a href="{{ route('posts.index', ['category' => 'Supplements']) }}" class="exploring-map__node exploring-map__node--supplements">Supplements</a>
+                </div>
+            </foreignObject>
+
+            <foreignObject x="82" y="255" width="210" height="110">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--left">
+                    <a href="{{ route('posts.index', ['category' => 'Lifestyle']) }}" class="exploring-map__node exploring-map__node--lifestyle">Lifestyle</a>
+                </div>
+            </foreignObject>
+
+            <foreignObject x="132" y="446" width="210" height="110">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--left">
+                    <a href="{{ route('posts.index', ['category' => 'Nutrition']) }}" class="exploring-map__node exploring-map__node--nutrition">Nutrition</a>
+                </div>
+            </foreignObject>
+
+            <foreignObject x="688" y="86" width="200" height="110">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--right">
+                    <a href="{{ route('posts.index', ['category' => 'Exercise']) }}" class="exploring-map__node exploring-map__node--exercise">Exercise</a>
+                </div>
+            </foreignObject>
+
+            <foreignObject x="688" y="255" width="210" height="110">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--right">
+                    <a href="{{ route('posts.index', ['category' => 'Hormones']) }}" class="exploring-map__node exploring-map__node--hormones">Hormones</a>
+                </div>
+            </foreignObject>
+
+            <foreignObject x="666" y="434" width="248" height="132">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--right">
+                    <a href="{{ route('posts.index', ['category' => 'Low-Maintenance Habits']) }}" class="exploring-map__node exploring-map__node--habits">Low-Maintenance Habits</a>
+                </div>
+            </foreignObject>
+        </svg>
+
+        <div class="exploring-map-mobile" aria-label="Mobile list of topics being explored">
+            <div class="exploring-map-mobile__center">What I'm Exploring</div>
+
+            <div class="exploring-map-mobile__items">
+                <a href="{{ route('posts.index', ['category' => 'Supplements']) }}" class="exploring-map__node exploring-map__node--supplements">Supplements</a>
+                <a href="{{ route('posts.index', ['category' => 'Lifestyle']) }}" class="exploring-map__node exploring-map__node--lifestyle">Lifestyle</a>
+                <a href="{{ route('posts.index', ['category' => 'Nutrition']) }}" class="exploring-map__node exploring-map__node--nutrition">Nutrition</a>
+                <a href="{{ route('posts.index', ['category' => 'Exercise']) }}" class="exploring-map__node exploring-map__node--exercise">Exercise</a>
+                <a href="{{ route('posts.index', ['category' => 'Hormones']) }}" class="exploring-map__node exploring-map__node--hormones">Hormones</a>
+                <a href="{{ route('posts.index', ['category' => 'Low-Maintenance Habits']) }}" class="exploring-map__node exploring-map__node--habits">Low-Maintenance Habits</a>
+            </div>
+        </div>
+    </div>
+</section>
 @endsection

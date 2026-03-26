@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:wght@700;800&family=Caveat:wght@400;600;700&display=swap');
 
 
 
@@ -723,7 +723,7 @@ base colours
 .about-blog__title {
     margin: 0 0 0.8rem;
     font-size: 2rem;
-    color: #A6757F;
+    color: #c56a7f;
     font-family: 'Playfair Display', serif;
 }
 
@@ -738,7 +738,249 @@ base colours
     margin-bottom: 0;
 }
 
+.exploring-map {
+    background: #F7F3F4;
+    padding: 3.5rem 1.25rem 2.5rem;
+}
+
+.exploring-map__header {
+    max-width: 1200px;
+    margin: 0 auto -1.15rem;
+    text-align: center;
+}
+
+.exploring-map__title {
+    margin: 0;
+    color: #c56a7f;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+}
+
+.exploring-map__subtitle {
+    margin: 0.5rem 0 0;
+    color: #5A5A5A;
+}
+
+.exploring-map__canvas {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.exploring-map-mobile {
+    display: none;
+}
+
+.exploring-map__svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.exploring-map__line {
+    fill: none;
+    stroke: #8C7B7F;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 7 10;
+    opacity: 0.9;
+}
+
+.exploring-map__node-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.exploring-map__node-wrap--left {
+    justify-content: flex-start;
+}
+
+.exploring-map__node-wrap--right {
+    justify-content: flex-end;
+}
+
+.exploring-map__node {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 128px;
+    min-height: 64px;
+    padding: 0.65rem 1rem;
+    border: 3px solid #8C7B7F;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    color: #5A5A5A;
+    text-decoration: none;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    font-size: 1.8rem;
+    line-height: 1;
+    box-shadow: 0 6px 0 rgba(166, 117, 127, 0.1);
+    transition: transform 180ms ease, box-shadow 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.exploring-map__node--supplements {
+    transform: rotate(-4deg);
+}
+
+.exploring-map__node--lifestyle {
+    transform: rotate(1.5deg);
+}
+
+.exploring-map__node--nutrition {
+    transform: rotate(-2.5deg);
+}
+
+.exploring-map__node--exercise {
+    transform: rotate(3deg);
+}
+
+.exploring-map__node--hormones {
+    transform: rotate(-1deg);
+}
+
+.exploring-map__node--habits {
+    transform: rotate(-3.5deg);
+}
+
+.exploring-map__node:hover {
+    color: #c56a7f;
+    border-color: #c56a7f;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 0 rgba(166, 117, 127, 0.12);
+}
+
+.exploring-map__node--center {
+    min-width: 210px;
+    min-height: 160px;
+    border-radius: 50%;
+    background: rgba(237, 224, 228, 0.95);
+    border-color: #c56a7f;
+    color: #c56a7f;
+    font-size: 2.35rem;
+    transform: rotate(1deg);
+}
+
+.exploring-map__node--center:hover {
+    transform: rotate(1deg);
+    box-shadow: 0 6px 0 rgba(166, 117, 127, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .site-nav-mobile {
+        padding: 0.35rem 1rem;
+    }
+
+    .hero {
+        min-height: auto;
+        padding-top: 0.75rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .hero__character-wrap {
+        flex: 0 0 38%;
+        padding-left: 0.5rem;
+    }
+
+    .hero__character-img {
+        height: 310px;
+    }
+
+    .hero__content {
+        padding: 1.5rem 0 1.5rem 0.5rem;
+    }
+
+    .hero__text-box {
+        padding: 1.25rem 2rem 1.25rem 1.5rem;
+    }
+
+    .hero__title {
+        font-size: 3rem;
+    }
+
+    .hero__subtitle {
+        max-width: 100%;
+    }
+
+    .about-blog {
+        min-height: auto;
+        padding-top: 0.5rem;
+        padding-bottom: 2rem;
+    }
+
+    .about-blog__image-wrap {
+        flex: 0 0 40%;
+        padding-left: 0.5rem;
+    }
+
+    .about-blog__image {
+        height: 420px;
+    }
+
+    .about-blog__content {
+        padding: 1.5rem 0 1.5rem 0.5rem;
+    }
+
+    .about-blog__text-box {
+        padding: 1.25rem 2rem 1.25rem 1.5rem;
+    }
+
+    .exploring-map {
+        padding: 2.5rem 1rem 2rem;
+    }
+
+    .exploring-map__title {
+        font-size: 2rem;
+    }
+
+    .exploring-map__header {
+        margin: 0 auto -0.55rem;
+    }
+
+    .exploring-map__canvas {
+        max-width: 100%;
+    }
+}
+
 @media (max-width: 820px) {
+    .hero {
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 0.75rem;
+    }
+
+    .hero__character-wrap {
+        flex: none;
+        width: 100%;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .hero__character-img {
+        height: 240px;
+    }
+
+    .hero__content {
+        flex: none;
+        width: 100%;
+        padding: 1rem 1rem 0;
+    }
+
+    .hero__text-box {
+        padding: 1.1rem 1.25rem;
+    }
+
+    .hero__title {
+        font-size: 2.4rem;
+        padding-right: 0;
+    }
+
+    .hero__subtitle {
+        font-size: 0.95rem;
+        line-height: 1.65;
+    }
+
     .about-blog {
         flex-direction: column;
         padding-bottom: 2rem;
@@ -763,6 +1005,232 @@ base colours
 
     .about-blog__text-box {
         padding: 1.25rem;
+    }
+
+    .about-blog__title {
+        font-size: 1.75rem;
+    }
+
+    .about-blog__content p {
+        font-size: 0.92rem;
+        line-height: 1.7;
+    }
+
+    .exploring-map {
+        padding: 2.5rem 0.75rem 1.75rem;
+    }
+
+    .exploring-map__header {
+        margin: 0 auto -0.2rem;
+        padding: 0 0.5rem;
+    }
+
+    .exploring-map__title {
+        font-size: 1.85rem;
+    }
+
+    .exploring-map__subtitle {
+        font-size: 0.92rem;
+    }
+
+    .exploring-map__canvas {
+        padding-bottom: 0.5rem;
+    }
+
+    .exploring-map__svg {
+        display: none;
+    }
+
+    .exploring-map-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        max-width: 420px;
+        margin: 0 auto;
+        padding: 0.75rem 0 0;
+    }
+
+    .exploring-map-mobile__center {
+        display: none;
+    }
+
+    .exploring-map-mobile__items {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.6rem;
+        width: 100%;
+        padding-right: 0.2rem;
+    }
+
+    .exploring-map-mobile__items .exploring-map__node {
+        width: auto;
+        min-width: 118px;
+        min-height: 46px;
+        padding: 0.45rem 0.8rem;
+        font-size: 1.2rem;
+        line-height: 1.05;
+        border-width: 2px;
+        box-shadow: 0 4px 0 rgba(166, 117, 127, 0.11);
+        transform-origin: right center;
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--supplements {
+        transform: rotate(-7deg) translateX(18px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--lifestyle {
+        transform: rotate(4deg) translateX(6px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--nutrition {
+        transform: rotate(-5deg) translateX(14px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--exercise {
+        transform: rotate(6deg) translateX(22px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--hormones {
+        transform: rotate(-3deg) translateX(10px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--habits {
+        transform: rotate(7deg) translateX(26px);
+    }
+}
+
+@media (max-width: 480px) {
+    .exploring-map-mobile {
+        max-width: 100%;
+        gap: 0.85rem;
+    }
+
+    .exploring-map-mobile__center {
+        display: none;
+    }
+
+    .exploring-map-mobile__items {
+        align-items: flex-end;
+        gap: 0.55rem;
+        padding-right: 0;
+    }
+
+    .exploring-map-mobile__items .exploring-map__node {
+        min-width: 104px;
+        min-height: 42px;
+        padding: 0.38rem 0.68rem;
+        font-size: 1.05rem;
+        box-shadow: 0 3px 0 rgba(166, 117, 127, 0.1);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--supplements {
+        transform: rotate(-7deg) translateX(10px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--lifestyle {
+        transform: rotate(4deg) translateX(2px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--nutrition {
+        transform: rotate(-5deg) translateX(8px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--exercise {
+        transform: rotate(6deg) translateX(12px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--hormones {
+        transform: rotate(-3deg) translateX(5px);
+    }
+
+    .exploring-map-mobile__items .exploring-map__node--habits {
+        transform: rotate(7deg) translateX(16px);
+    }
+}
+
+@media (max-width: 480px) {
+    .site-nav-mobile {
+        height: 82px;
+        padding: 0.25rem 0.85rem;
+    }
+
+    .site-nav-mobile__logo-image {
+        height: 50px;
+    }
+
+    .site-nav-mobile__menu {
+        gap: 1rem;
+        padding: 0.9rem 0.85rem 1.1rem;
+    }
+
+    .hero {
+        padding-top: 0.35rem;
+    }
+
+    .hero__character-img {
+        height: 210px;
+    }
+
+    .hero__content {
+        padding: 0.75rem 0.75rem 0;
+    }
+
+    .hero__text-box {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .hero__title {
+        font-size: 2rem;
+    }
+
+    .hero__subtitle {
+        font-size: 0.9rem;
+    }
+
+    .about-blog {
+        padding-top: 0.25rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .about-blog__image {
+        height: 260px;
+    }
+
+    .about-blog__content {
+        padding: 0.75rem 0.75rem 0;
+    }
+
+    .about-blog__text-box {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .about-blog__title {
+        font-size: 1.55rem;
+    }
+
+    .exploring-map {
+        padding: 2rem 0.5rem 1.5rem;
+    }
+
+    .exploring-map__header {
+        margin: 0 auto 0.1rem;
+    }
+
+    .exploring-map__title {
+        font-size: 1.65rem;
+    }
+
+    .exploring-map__subtitle {
+        font-size: 0.88rem;
+        line-height: 1.5;
+    }
+
+    .exploring-map__svg {
+        min-width: 640px;
     }
 }
 

@@ -15,6 +15,7 @@ class Post extends Model
         'excerpt',
         'content',
         'cover_image',
+        'category',
         'published_at',
     ];
 

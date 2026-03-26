@@ -19,6 +19,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'A realistic breakdown of small routine changes that improved my daily energy without crash diets.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/reading.PNG',
+                'category' => 'Lifestyle',
                 'published_at' => now()->subDays(12),
             ],
             [
@@ -26,6 +27,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'No hype, just notes on what I tested, what changed, and what did not make a difference.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/thinking.PNG',
+                'category' => 'Supplements',
                 'published_at' => now()->subDays(9),
             ],
             [
@@ -33,6 +35,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'My weekly shopping structure to make blood-sugar-friendly meals easier during busy weeks.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/standing.PNG',
+                'category' => 'Nutrition',
                 'published_at' => now()->subDays(7),
             ],
             [
@@ -40,6 +43,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'A simple template for spotting patterns in sleep, stress, food, cycle, and skin changes.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/waving.PNG',
+                'category' => 'Low-Maintenance Habits',
                 'published_at' => now()->subDays(5),
             ],
             [
@@ -47,6 +51,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'Why lower-intensity consistency worked better for me than pushing hard and burning out.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/tired.PNG',
+                'category' => 'Exercise',
                 'published_at' => now()->subDays(2),
             ],
             [
@@ -54,6 +59,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'How chronic stress worsens PCOS symptoms and what I do to actually wind down.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/reading.PNG',
+                'category' => 'Hormones',
                 'published_at' => now()->subDays(15),
             ],
             [
@@ -61,6 +67,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'A beginner-friendly intro to adjusting food, exercise, and rest around your cycle phases.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/thinking.PNG',
+                'category' => 'Hormones',
                 'published_at' => now()->subDays(18),
             ],
             [
@@ -68,6 +75,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'An honest review of taking myo-inositol daily — what improved, what stayed the same.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/standing.PNG',
+                'category' => 'Supplements',
                 'published_at' => now()->subDays(22),
             ],
             [
@@ -75,6 +83,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'Why fixing my sleep routine had a bigger impact than any supplement I tried.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/waving.PNG',
+                'category' => 'Low-Maintenance Habits',
                 'published_at' => now()->subDays(28),
             ],
             [
@@ -82,6 +91,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'Breaking down my latest results in plain language and what I am adjusting because of them.',
                 'content' => 'This is a starter post body. Replace with your full article content.',
                 'cover_image' => 'images/tired.PNG',
+                'category' => 'Lifestyle',
                 'published_at' => now()->subDays(33),
             ],
         ];

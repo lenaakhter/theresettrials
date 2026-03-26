@@ -30,6 +30,7 @@ class PostManagementController extends Controller
             'excerpt' => $data['excerpt'] ?? null,
             'content' => $data['content'],
             'cover_image' => $data['cover_image'] ?? null,
+            'category' => $data['category'] ?? null,
             'published_at' => $this->resolvePublishedAt($request, $data),
         ]);
 
@@ -52,6 +53,7 @@ class PostManagementController extends Controller
             'excerpt' => $data['excerpt'] ?? null,
             'content' => $data['content'],
             'cover_image' => $data['cover_image'] ?? null,
+            'category' => $data['category'] ?? null,
             'published_at' => $this->resolvePublishedAt($request, $data),
         ]);
 
@@ -72,6 +74,7 @@ class PostManagementController extends Controller
             'excerpt' => ['nullable', 'string', 'max:500'],
             'content' => ['required', 'string'],
             'cover_image' => ['nullable', 'string', 'max:255'],
+            'category' => ['nullable', 'string', 'max:100'],
             'published_at' => ['nullable', 'date'],
             'publish_now' => ['nullable', 'boolean'],
         ];

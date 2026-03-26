@@ -3,8 +3,10 @@
 @section('content')
 <section class="blog-index">
     <div class="blog-index__header">
-        <h1 class="blog-index__title">All Posts</h1>
-        <p class="blog-index__subtitle">Experiments, notes, and practical updates from The Reset Trials.</p>
+        <h1 class="blog-index__title">{{ $category ? $category : 'All Posts' }}</h1>
+        <p class="blog-index__subtitle">
+            {{ $category ? 'Posts filed under '.$category.'.' : 'Experiments, notes, and practical updates from The Reset Trials.' }}
+        </p>
     </div>
 
     <div class="posts-grid">

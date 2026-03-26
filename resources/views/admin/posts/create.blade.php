@@ -49,6 +49,9 @@
                 <label for="cover_image" class="admin-form__label">Cover Image Path (optional)</label>
                 <input id="cover_image" name="cover_image" type="text" value="{{ old('cover_image') }}" placeholder="images/reading.PNG" class="admin-form__input">
 
+                <label for="category" class="admin-form__label">Category (optional)</label>
+                <input id="category" name="category" type="text" value="{{ old('category') }}" placeholder="Supplements" class="admin-form__input">
+
                 <label for="published_at" class="admin-form__label">Publish Date/Time (optional)</label>
                 <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at') }}" class="admin-form__input">
 

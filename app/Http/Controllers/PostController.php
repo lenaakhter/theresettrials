@@ -10,12 +10,15 @@ class PostController extends Controller
 {
     public function index()
     {
+        $category = request('category');
+
         $posts = Post::query()
             ->published()
+            ->when($category, fn ($q) => $q->where('category', $category))
             ->latest('published_at')
             ->paginate(9);
 
-        return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts', 'category'));
     }
 
     public function show(Post $post)

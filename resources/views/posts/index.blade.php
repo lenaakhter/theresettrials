@@ -9,6 +9,32 @@
         </p>
     </div>
 
+    @if (! $category && ($activeExperiments ?? collect())->isNotEmpty())
+        <section class="blog-featured-experiments">
+            <div class="blog-featured-experiments__header">
+                <h2 class="blog-featured-experiments__title">Currently Testing</h2>
+                <p class="blog-featured-experiments__subtitle">Currently ongoing</p>
+            </div>
+
+            <div class="blog-featured-experiments__grid">
+                @foreach ($activeExperiments as $experiment)
+                    <article class="blog-featured-card">
+                        <div class="blog-featured-card__label">Currently ongoing</div>
+                        <h3 class="blog-featured-card__title">
+                            <a href="{{ route('experiments.show', $experiment) }}">{{ $experiment->title }}</a>
+                        </h3>
+                        <p class="blog-featured-card__excerpt">{{ $experiment->description }}</p>
+                        <p class="blog-featured-card__meta">Started {{ $experiment->start_date->format('M d, Y') }}</p>
+                    </article>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
+    <div class="blog-index__posts-heading">
+        <h2 class="blog-index__posts-title">{{ $category ? 'Posts' : 'More Posts' }}</h2>
+    </div>
+
     <div class="posts-grid">
         @forelse ($posts as $post)
             <article class="post-card">
@@ -31,10 +57,6 @@
         @empty
             <p class="posts-empty">No posts yet.</p>
         @endforelse
-    </div>
-
-    <div class="blog-pagination">
-        {{ $posts->links() }}
     </div>
 </section>
 @endsection

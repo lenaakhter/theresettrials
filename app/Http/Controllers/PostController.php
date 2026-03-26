@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommentLike;
+use App\Models\Experiment;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,13 +13,19 @@ class PostController extends Controller
     {
         $category = request('category');
 
+        $activeExperiments = Experiment::query()
+            ->notArchived()
+            ->where('status', 'active')
+            ->latest('start_date')
+            ->get();
+
         $posts = Post::query()
             ->published()
             ->when($category, fn ($q) => $q->where('category', $category))
             ->latest('published_at')
-            ->paginate(9);
+            ->get();
 
-        return view('posts.index', compact('posts', 'category'));
+        return view('posts.index', compact('posts', 'category', 'activeExperiments'));
     }
 
     public function show(Post $post)

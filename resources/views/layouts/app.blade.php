@@ -14,5 +14,6 @@
         <x-mailing-popup />
     @endunless
     @yield('content')
+    <x-footer />
 </body>
 </html>

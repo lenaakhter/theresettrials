@@ -9,11 +9,14 @@ use App\Http\Controllers\Auth\ReaderAuthController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ExperimentController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\JoinController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 
 Route::get('/', function () {
     $latestPosts = Post::query()

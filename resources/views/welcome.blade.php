@@ -17,15 +17,19 @@
 <section class="latest-posts">
     <div class="latest-posts__header">
         <h2 class="latest-posts__title">Latest Posts</h2>
-        <a href="{{ route('posts.index') }}" class="latest-posts__view-all">View all</a>
+        <a href="{{ route('posts.index') }}" class="latest-posts__view-all">See more</a>
     </div>
 
     @if ($latestPosts->isEmpty())
         <p class="latest-posts__empty">No posts yet. Run migrations and seeders to add starter posts.</p>
     @else
-        <div class="latest-posts__track" role="region" aria-label="Latest posts carousel">
+        <div class="latest-posts__track" role="region" aria-label="Latest posts board">
             @foreach ($latestPosts as $post)
-                <article class="latest-post">
+                @php
+                    $i = $loop->index;
+                    $tile = match($i) { 0 => 'featured', 1 => 'tall', 4 => 'wide', default => '' };
+                @endphp
+                <article class="latest-post{{ $tile ? ' latest-post--'.$tile : '' }}">
                     <a href="{{ route('posts.show', $post) }}" class="latest-post__image-wrap">
                         @if ($post->cover_image)
                             <img src="{{ asset($post->cover_image) }}" alt="{{ $post->title }}" class="latest-post__image">

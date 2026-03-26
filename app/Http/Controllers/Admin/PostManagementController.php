@@ -58,6 +58,13 @@ class PostManagementController extends Controller
         return redirect()->route('admin.posts.edit', $post)->with('status', 'Post updated successfully.');
     }
 
+    public function destroy(Post $post)
+    {
+        $post->delete();
+
+        return redirect()->route('admin.posts.create')->with('status', 'Post deleted successfully.');
+    }
+
     private function rules(): array
     {
         return [

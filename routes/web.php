@@ -17,7 +17,7 @@ Route::get('/', function () {
     $latestPosts = Post::query()
         ->published()
         ->latest('published_at')
-        ->take(6)
+        ->take(7)
         ->get();
 
     return view('welcome', compact('latestPosts'));
@@ -90,6 +90,7 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::post('/posts', [PostManagementController::class, 'store'])->name('posts.store');
         Route::get('/posts/{post}/edit', [PostManagementController::class, 'edit'])->name('posts.edit');
         Route::put('/posts/{post}', [PostManagementController::class, 'update'])->name('posts.update');
+        Route::delete('/posts/{post}', [PostManagementController::class, 'destroy'])->name('posts.destroy');
         Route::get('/subscribers', [SubscriberManagementController::class, 'index'])->name('subscribers.index');
         Route::get('/subscribers/export', [SubscriberManagementController::class, 'export'])->name('subscribers.export');
         Route::get('/admins/create', [AdminUserManagementController::class, 'create'])->name('admins.create');

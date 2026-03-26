@@ -61,6 +61,12 @@
                 <button type="submit" class="admin-form__button">Save Changes</button>
             </form>
 
+            <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" onsubmit="return confirm('Delete this post? This cannot be undone.')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="admin-form__button admin-form__button--delete">Delete Post</button>
+            </form>
+
             <aside class="admin-recent">
                 <h2 class="admin-recent__title">Recent Posts</h2>
                 @forelse ($recentPosts as $recentPost)

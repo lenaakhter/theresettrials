@@ -49,6 +49,41 @@ class PostSeeder extends Seeder
                 'cover_image' => 'images/tired.PNG',
                 'published_at' => now()->subDays(2),
             ],
+            [
+                'title' => 'The Cortisol Connection: Stress and PCOS',
+                'excerpt' => 'How chronic stress worsens PCOS symptoms and what I do to actually wind down.',
+                'content' => 'This is a starter post body. Replace with your full article content.',
+                'cover_image' => 'images/reading.PNG',
+                'published_at' => now()->subDays(15),
+            ],
+            [
+                'title' => 'Cycle Syncing 101: Matching Life to Your Hormones',
+                'excerpt' => 'A beginner-friendly intro to adjusting food, exercise, and rest around your cycle phases.',
+                'content' => 'This is a starter post body. Replace with your full article content.',
+                'cover_image' => 'images/thinking.PNG',
+                'published_at' => now()->subDays(18),
+            ],
+            [
+                'title' => 'Inositol: Six Months In, Here Is What Changed',
+                'excerpt' => 'An honest review of taking myo-inositol daily — what improved, what stayed the same.',
+                'content' => 'This is a starter post body. Replace with your full article content.',
+                'cover_image' => 'images/standing.PNG',
+                'published_at' => now()->subDays(22),
+            ],
+            [
+                'title' => 'Sleep and PCOS: The Habit That Moved the Needle Most',
+                'excerpt' => 'Why fixing my sleep routine had a bigger impact than any supplement I tried.',
+                'content' => 'This is a starter post body. Replace with your full article content.',
+                'cover_image' => 'images/waving.PNG',
+                'published_at' => now()->subDays(28),
+            ],
+            [
+                'title' => 'What My Blood Work Actually Showed',
+                'excerpt' => 'Breaking down my latest results in plain language and what I am adjusting because of them.',
+                'content' => 'This is a starter post body. Replace with your full article content.',
+                'cover_image' => 'images/tired.PNG',
+                'published_at' => now()->subDays(33),
+            ],
         ];
 
         foreach ($posts as $postData) {

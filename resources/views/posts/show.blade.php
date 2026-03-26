@@ -121,12 +121,16 @@ document.addEventListener('click', (event) => {
 <section class="latest-posts latest-posts--compact">
     <div class="latest-posts__header">
         <h2 class="latest-posts__title">More Posts</h2>
-        <a href="{{ route('blogs.index') }}" class="latest-posts__view-all">View all</a>
+        <a href="{{ route('blogs.index') }}" class="latest-posts__view-all">See more</a>
     </div>
 
     <div class="latest-posts__track">
         @foreach ($latestPosts as $latestPost)
-            <article class="latest-post">
+            @php
+                $i = $loop->index;
+                $tile = match($i) { 0 => 'featured', 1 => 'tall', 4 => 'wide', default => '' };
+            @endphp
+            <article class="latest-post{{ $tile ? ' latest-post--'.$tile : '' }}">
                 <a href="{{ route('posts.show', $latestPost) }}" class="latest-post__image-wrap">
                     @if ($latestPost->cover_image)
                         <img src="{{ asset($latestPost->cover_image) }}" alt="{{ $latestPost->title }}" class="latest-post__image">

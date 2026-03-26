@@ -20,6 +20,9 @@
         <a href="/disclaimer" class="site-nav-bar__link">Disclaimer</a>
         <a href="/resources" class="site-nav-bar__link">Links &amp; Resources</a>
         @auth
+                @if(auth()->user()->is_admin)
+                    <a href="{{ route('admin.experiments.index') }}" class="site-nav-bar__link">Admin Lair</a>
+                @endif
             <a href="{{ route('profile.edit') }}" class="site-nav-bar__link">Profile</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -53,6 +56,9 @@
 
         <div class="join-us">
             @auth
+                    @if(auth()->user()->is_admin)
+                        <a href="{{ route('admin.experiments.index') }}" class="site-nav-bar__link">Admin</a>
+                    @endif
                 <a href="{{ route('profile.edit') }}" class="site-nav-bar__link">Profile</a>
                 <form method="POST" action="{{ route('logout') }}" class="site-nav-logout-form">
                     @csrf

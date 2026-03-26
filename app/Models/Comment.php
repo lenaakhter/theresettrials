@@ -14,6 +14,9 @@ class Comment extends Model
         'user_id',
         'parent_id',
         'body',
+        'content',
+        'commentable_type',
+        'commentable_id',
     ];
 
     public function post()
@@ -24,6 +27,11 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function commentable()
+    {
+        return $this->morphTo();
     }
 
     public function parent()
@@ -46,3 +54,4 @@ class Comment extends Model
         return $this->hasMany(CommentLike::class);
     }
 }
+

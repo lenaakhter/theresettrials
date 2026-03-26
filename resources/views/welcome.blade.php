@@ -139,4 +139,44 @@
         </div>
     </div>
 </section>
+
+<section class="experimenting">
+    <div class="experimenting__header">
+        <h2 class="experimenting__title">Currently Experimenting</h2>
+        <p class="experimenting__subtitle">New experiments I'm testing right now</p>
+    </div>
+
+    <div class="experimenting__grid">
+        <div class="experimenting__image-section">
+            <div class="experimenting__image-wrap">
+                <img src="{{ asset('images/experiment.png') }}" alt="Currently experimenting">
+            </div>
+        </div>
+
+        <div class="experimenting__cards-section">
+            @forelse($experiments ?? [] as $experiment)
+                <a href="{{ route('experiments.show', $experiment) }}" style="text-decoration: none;">
+                    <div class="experimenting__item">
+                        <div class="experimenting__card">
+                            <div class="experimenting__card-content">
+                                <h3 class="experimenting__card-title">{{ $experiment->title }}</h3>
+                                <p class="experimenting__card-description">{{ $experiment->description }}</p>
+                                <p class="experimenting__card-meta">Started: {{ $experiment->start_date->format('M Y') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            @empty
+                <div class="experimenting__item">
+                    <div class="experimenting__card">
+                        <div class="experimenting__card-content">
+                            <h3 class="experimenting__card-title">No Experiments Yet</h3>
+                            <p class="experimenting__card-description">Check back soon for ongoing experiments!</p>
+                        </div>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
 @endsection

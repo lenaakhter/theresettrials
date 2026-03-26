@@ -4,9 +4,11 @@ use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\AdminUserManagementController;
 use App\Http\Controllers\Admin\PostManagementController;
 use App\Http\Controllers\Admin\SubscriberManagementController;
+use App\Http\Controllers\Admin\ExperimentController as AdminExperimentController;
 use App\Http\Controllers\Auth\ReaderAuthController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ExperimentController;
 use App\Http\Controllers\JoinController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -19,8 +21,14 @@ Route::get('/', function () {
         ->latest('published_at')
         ->take(7)
         ->get();
+    
+    $experiments = \App\Models\Experiment::where('status', 'active')
+            ->notArchived()
+        ->latest('start_date')
+        ->take(2)
+        ->get();
 
-    return view('welcome', compact('latestPosts'));
+    return view('welcome', compact('latestPosts', 'experiments'));
 })->name('home');
 
 Route::get('/blogs', [PostController::class, 'index'])->name('blogs.index');
@@ -70,7 +78,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/comments/{comment}/replies', [CommentController::class, 'reply'])->name('comments.reply');
     Route::post('/comments/{comment}/like', [CommentController::class, 'toggleLike'])->name('comments.like');
     Route::post('/comments/{comment}/delete', [CommentController::class, 'delete'])->name('comments.delete');
+    Route::post('/experiments/{experiment}/comments', [ExperimentController::class, 'comment'])->name('experiments.comment');
 });
+
+Route::get('/experiments/{experiment}', [ExperimentController::class, 'show'])->name('experiments.show');
 
 Route::get('/join', [JoinController::class, 'create'])->name('join.create');
 Route::post('/join', [JoinController::class, 'store'])->name('join.store');
@@ -93,8 +104,18 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::delete('/posts/{post}', [PostManagementController::class, 'destroy'])->name('posts.destroy');
         Route::get('/subscribers', [SubscriberManagementController::class, 'index'])->name('subscribers.index');
         Route::get('/subscribers/export', [SubscriberManagementController::class, 'export'])->name('subscribers.export');
+        Route::get('/subscribers/export-excel', [SubscriberManagementController::class, 'exportExcel'])->name('subscribers.export-excel');
         Route::get('/admins/create', [AdminUserManagementController::class, 'create'])->name('admins.create');
         Route::post('/admins', [AdminUserManagementController::class, 'store'])->name('admins.store');
+        Route::get('/experiments/{experiment}/add-entry', [AdminExperimentController::class, 'addEntry'])->name('experiments.add-entry');
+        Route::post('/experiments/{experiment}/entries', [AdminExperimentController::class, 'storeEntry'])->name('experiments.store-entry');
+        Route::get('/experiments', [AdminExperimentController::class, 'index'])->name('experiments.index');
+        Route::get('/experiments/create', [AdminExperimentController::class, 'create'])->name('experiments.create');
+        Route::post('/experiments', [AdminExperimentController::class, 'store'])->name('experiments.store');
+        Route::get('/experiments/{experiment}/edit', [AdminExperimentController::class, 'edit'])->name('experiments.edit');
+        Route::put('/experiments/{experiment}', [AdminExperimentController::class, 'update'])->name('experiments.update');
+        Route::delete('/experiments/{experiment}', [AdminExperimentController::class, 'destroy'])->name('experiments.destroy');
+        Route::patch('/experiments/{experiment}/archive', [AdminExperimentController::class, 'archive'])->name('experiments.archive');
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
     });
 });

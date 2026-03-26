@@ -1,35 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{{ asset('images/waving.PNG') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <title>Admin · Add Admin</title>
-</head>
-<body class="app-body">
+@extends('layouts.admin')
+
+@section('content')
     <main class="admin-posts">
         <div class="admin-posts__header">
             <div>
                 <h1 class="admin-posts__title">Add Admin Account</h1>
                 <p class="admin-posts__subtitle">Create another account with admin access.</p>
             </div>
-            <div class="admin-actions">
-                <a href="{{ route('admin.posts.create') }}" class="admin-posts__logout admin-posts__logout--link">Write post</a>
-                <a href="{{ route('admin.subscribers.index') }}" class="admin-posts__logout admin-posts__logout--link">Subscribers</a>
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button type="submit" class="admin-posts__logout">Log out</button>
-                </form>
-            </div>
         </div>
 
         @if (session('status'))
-            <div class="admin-posts__success">{{ session('status') }}</div>
+            <div class="admin-flash admin-flash--success" data-flash>
+                <span>{{ session('status') }}</span>
+                <button type="button" class="admin-flash__close" data-flash-close aria-label="Dismiss notification">&times;</button>
+            </div>
         @endif
 
         @if ($errors->any())
-            <div class="admin-posts__error">{{ $errors->first() }}</div>
+            <div class="admin-flash admin-flash--error" data-flash>
+                <span>{{ $errors->first() }}</span>
+                <button type="button" class="admin-flash__close" data-flash-close aria-label="Dismiss notification">&times;</button>
+            </div>
         @endif
 
         <section class="admin-layout">
@@ -64,5 +55,15 @@
             </aside>
         </section>
     </main>
-</body>
-</html>
+    <script>
+    document.addEventListener('click', function (event) {
+        const closeButton = event.target.closest('[data-flash-close]');
+        if (closeButton) {
+            const flash = closeButton.closest('[data-flash]');
+            if (flash) {
+                flash.remove();
+            }
+        }
+    });
+    </script>
+@endsection

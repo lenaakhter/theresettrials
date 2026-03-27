@@ -6,6 +6,48 @@ function Refresh-Path {
     $env:Path = "$machine;$user"
 }
 
+function Add-PathIfExists {
+    param(
+        [string]$DirPath
+    )
+
+    if (-not (Test-Path $DirPath)) {
+        return
+    }
+
+    $segments = $env:Path -split ';'
+    if (-not ($segments -contains $DirPath)) {
+        $env:Path = "$DirPath;$env:Path"
+    }
+}
+
+function Resolve-Composer {
+    $composer = Get-Command composer -ErrorAction SilentlyContinue
+    if ($composer) {
+        return $composer.Source
+    }
+
+    $candidateFiles = @(
+        'C:\ProgramData\ComposerSetup\bin\composer.bat',
+        'C:\Program Files\Composer\bin\composer.bat',
+        "$env:LOCALAPPDATA\Programs\Composer\composer.bat"
+    )
+
+    foreach ($file in $candidateFiles) {
+        if (Test-Path $file) {
+            Add-PathIfExists -DirPath (Split-Path -Parent $file)
+            $composer = Get-Command composer -ErrorAction SilentlyContinue
+            if ($composer) {
+                return $composer.Source
+            }
+
+            return $file
+        }
+    }
+
+    return $null
+}
+
 function Ensure-Command {
     param(
         [string]$CommandName,
@@ -40,11 +82,16 @@ Ensure-Command -CommandName npm -InstallBlock {
 
 Set-Location $PSScriptRoot
 
+$composerExe = Resolve-Composer
+if (-not $composerExe) {
+    throw "Composer was installed but is still not available. Open a new terminal and run: winget install --id Composer.Composer -e"
+}
+
 if (-not (Test-Path '.env') -and (Test-Path '.env.example')) {
     Copy-Item '.env.example' '.env'
 }
 
-composer install
+& $composerExe install
 php artisan key:generate
 php artisan migrate --force
 npm install

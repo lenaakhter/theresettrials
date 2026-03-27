@@ -1513,6 +1513,50 @@ base colours
     color: #9a4e61;
 }
 
+.dismissible-notice {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.dismissible-notice__close {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: currentColor;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+}
+
+.reader-auth__ban-popup {
+    margin: 0 0 0.8rem;
+    background: #f9e3e7;
+    border: 1px solid #e1b7c0;
+    border-radius: 12px;
+    padding: 0.7rem 0.85rem;
+    color: #9a4e61;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.reader-auth__ban-popup p {
+    margin: 0;
+}
+
+.reader-auth__ban-popup button {
+    border: 0;
+    background: transparent;
+    color: #9a4e61;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
 .reader-auth__switch {
     margin: 0.9rem 0 0;
     color: #5A5A5A;
@@ -2823,6 +2867,77 @@ body.is-avatar-editor-open {
 .admin-table th {
     color: #8C7B7F;
     font-weight: 700;
+}
+
+.admin-table__inline-form {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.admin-table__hours-input {
+    width: 84px;
+    border: 1px solid #d5c7cc;
+    border-radius: 8px;
+    padding: 0.35rem 0.45rem;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.88rem;
+    color: #2B2B2B;
+}
+
+.admin-table__muted {
+    color: #8C7B7F;
+    font-size: 0.85rem;
+}
+
+.admin-table__row--banned td {
+    background: #fdecef;
+    border-top: 1px solid #efc1cb;
+    border-bottom: 1px solid #efc1cb;
+}
+
+.admin-ban-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 21, 24, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+    padding: 1rem;
+}
+
+.admin-ban-modal[hidden] {
+    display: none;
+}
+
+.admin-ban-modal__dialog {
+    width: min(520px, 100%);
+    background: #fff;
+    border: 1px solid #ead8de;
+    border-radius: 14px;
+    padding: 1rem;
+    position: relative;
+}
+
+.admin-ban-modal__close {
+    position: absolute;
+    right: 0.65rem;
+    top: 0.55rem;
+    border: 0;
+    background: transparent;
+    color: #9a4e61;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.admin-ban-modal__actions {
+    margin-top: 0.6rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
 }
 
 .admin-pagination {

@@ -7,14 +7,20 @@
         <p class="join-page__subtitle">Drop your email below and I’ll send updates when new experiments and posts go live.</p>
 
         @if (session('success'))
-            <p class="join-page__message join-page__message--success">{{ session('success') }}</p>
+            <div class="join-page__message join-page__message--success dismissible-notice" data-dismissible-notice>
+                <span>{{ session('success') }}</span>
+                <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+            </div>
         @endif
 
         @if ($errors->any())
-            <div class="join-page__message join-page__message--error">
+            <div class="join-page__message join-page__message--error dismissible-notice" data-dismissible-notice>
+                <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+                <div>
                 @foreach ($errors->all() as $error)
                     <p>{{ $error }}</p>
                 @endforeach
+                </div>
             </div>
         @endif
 

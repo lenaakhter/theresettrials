@@ -11,6 +11,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ExperimentController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\JoinController;
+use App\Http\Controllers\BanAppealController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Post;
@@ -53,6 +54,9 @@ Route::get('/resources', function () {
 
 Route::redirect('/contact', '/disclaimer');
 
+Route::get('/ban-appeal', [BanAppealController::class, 'create'])->name('ban.appeal.create');
+Route::post('/ban-appeal', [BanAppealController::class, 'store'])->name('ban.appeal.store');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [ReaderAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [ReaderAuthController::class, 'login'])->name('login.attempt');
@@ -79,7 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/complete-profile', [ProfileController::class, 'completeProfile'])->name('profile.complete.update');
 });
 
-Route::middleware(['auth', 'profile.complete'])->group(function () {
+Route::middleware(['auth', 'not.banned', 'profile.complete'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/posts/{post:slug}/comments', [CommentController::class, 'store'])->name('comments.store');
@@ -104,7 +108,7 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::post('/login', [AdminAuthController::class, 'login'])->name('login.attempt');
     });
 
-    Route::middleware(['auth', 'admin'])->group(function () {
+    Route::middleware(['auth', 'not.banned', 'admin'])->group(function () {
         Route::get('/posts/create', [PostManagementController::class, 'create'])->name('posts.create');
         Route::post('/posts', [PostManagementController::class, 'store'])->name('posts.store');
         Route::get('/posts/{post}/edit', [PostManagementController::class, 'edit'])->name('posts.edit');
@@ -113,6 +117,8 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::get('/subscribers', [SubscriberManagementController::class, 'index'])->name('subscribers.index');
         Route::get('/subscribers/export', [SubscriberManagementController::class, 'export'])->name('subscribers.export');
         Route::get('/subscribers/export-excel', [SubscriberManagementController::class, 'exportExcel'])->name('subscribers.export-excel');
+        Route::post('/subscribers/users/{user}/ban', [SubscriberManagementController::class, 'ban'])->name('subscribers.ban');
+        Route::post('/subscribers/users/{user}/unban', [SubscriberManagementController::class, 'unban'])->name('subscribers.unban');
         Route::get('/admins/create', [AdminUserManagementController::class, 'create'])->name('admins.create');
         Route::post('/admins', [AdminUserManagementController::class, 'store'])->name('admins.store');
         Route::get('/experiments/{experiment}/add-entry', [AdminExperimentController::class, 'addEntry'])->name('experiments.add-entry');

@@ -3,15 +3,28 @@
 @section('content')
 <section class="reader-auth">
     <div class="reader-auth__card">
+        @if (session('ban_popup'))
+            <div class="reader-auth__ban-popup" id="login-ban-popup" role="alert" aria-live="assertive">
+                <p>{{ session('ban_popup') }}</p>
+                <button type="button" id="login-ban-popup-close" aria-label="Dismiss ban notice">&times;</button>
+            </div>
+        @endif
+
         <h1 class="reader-auth__title">Log in</h1>
         <p class="reader-auth__subtitle">Log in to comment and reply on blog posts.</p>
 
         @if (session('status'))
-            <div class="reader-auth__success">{{ session('status') }}</div>
+            <div class="reader-auth__success dismissible-notice" data-dismissible-notice>
+                <span>{{ session('status') }}</span>
+                <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+            </div>
         @endif
 
         @if ($errors->any())
-            <div class="reader-auth__error">{{ $errors->first() }}</div>
+            <div class="reader-auth__error dismissible-notice" data-dismissible-notice>
+                <span>{{ $errors->first() }}</span>
+                <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+            </div>
         @endif
 
         <form method="POST" action="{{ route('login.attempt') }}" class="admin-form">
@@ -58,4 +71,21 @@
         <p class="reader-auth__switch">New here? <a href="{{ route('register') }}">Create an account</a></p>
     </div>
 </section>
+
+@if (session('ban_popup'))
+    <script>
+        (() => {
+            const popup = document.getElementById('login-ban-popup');
+            const closeBtn = document.getElementById('login-ban-popup-close');
+
+            if (!popup || !closeBtn) {
+                return;
+            }
+
+            closeBtn.addEventListener('click', () => {
+                popup.remove();
+            });
+        })();
+    </script>
+@endif
 @endsection

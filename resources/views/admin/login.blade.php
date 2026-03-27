@@ -14,7 +14,10 @@
             <p class="admin-auth__subtitle">Secure sign in required.</p>
 
             @if ($errors->any())
-                <div class="admin-auth__error">{{ $errors->first() }}</div>
+                <div class="admin-auth__error dismissible-notice" data-dismissible-notice>
+                    <span>{{ $errors->first() }}</span>
+                    <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+                </div>
             @endif
 
             <form method="POST" action="{{ route('admin.login.attempt') }}" class="admin-form">
@@ -35,5 +38,18 @@
             </form>
         </section>
     </main>
+    <script>
+        document.addEventListener('click', (event) => {
+            const closeButton = event.target.closest('[data-notice-close]');
+            if (!closeButton) {
+                return;
+            }
+
+            const notice = closeButton.closest('[data-dismissible-notice]');
+            if (notice) {
+                notice.remove();
+            }
+        });
+    </script>
 </body>
 </html>

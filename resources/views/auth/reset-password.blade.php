@@ -7,7 +7,10 @@
         <p class="reader-auth__subtitle">Almost there — enter a new password below.</p>
 
         @if ($errors->any())
-            <div class="reader-auth__error">{{ $errors->first() }}</div>
+            <div class="reader-auth__error dismissible-notice" data-dismissible-notice>
+                <span>{{ $errors->first() }}</span>
+                <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+            </div>
         @endif
 
         <form method="POST" action="{{ route('password.update') }}" class="admin-form">

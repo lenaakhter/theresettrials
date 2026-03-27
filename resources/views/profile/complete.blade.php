@@ -7,7 +7,10 @@
         <p class="reader-auth__subtitle">Before continuing, please set your display name and username.</p>
 
         @if ($errors->any())
-            <div class="reader-auth__error">{{ $errors->first() }}</div>
+            <div class="reader-auth__error dismissible-notice" data-dismissible-notice>
+                <span>{{ $errors->first() }}</span>
+                <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+            </div>
         @endif
 
         <form method="POST" action="{{ route('profile.complete.update') }}" class="admin-form">

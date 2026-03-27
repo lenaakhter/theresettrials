@@ -21,7 +21,10 @@
             <p class="site-footer__feedback-sub">Ideas, suggestions, or just want to say hi - drop a note below.</p>
 
             @if (session('feedback_sent'))
-                <p class="site-footer__thanks">Thanks! Your message means a lot ✨</p>
+                <div class="site-footer__thanks dismissible-notice" data-dismissible-notice>
+                    <span>Thanks! Your message means a lot ✨</span>
+                    <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+                </div>
             @else
                 <form action="{{ route('feedback.store') }}" method="POST" class="site-footer__form">
                     @csrf
@@ -41,7 +44,10 @@
                         rows="4"
                     ></textarea>
                     @error('message')
-                        <p class="site-footer__error">{{ $message }}</p>
+                        <div class="site-footer__error dismissible-notice" data-dismissible-notice>
+                            <span>{{ $message }}</span>
+                            <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+                        </div>
                     @enderror
                     <button type="submit" class="site-footer__submit">Send feedback</button>
                 </form>

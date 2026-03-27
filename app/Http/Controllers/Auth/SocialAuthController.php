@@ -68,6 +68,13 @@ class SocialAuthController extends Controller
             ]);
         }
 
+        if ($user->banned_until && now()->lessThan($user->banned_until)) {
+            $hours = $user->ban_duration_hours
+                ?: ($user->ban_started_at ? $user->banned_until->diffInHours($user->ban_started_at) : 0);
+
+            return redirect()->route('login')->with('ban_popup', 'This user has been banned for '.$hours.' hours, see email for reason.');
+        }
+
         Auth::login($user, true);
 
         if (! $user->hasRequiredProfileInfo()) {

@@ -18,7 +18,10 @@
             <h2 class="comments-section__title">Comments</h2>
 
             @if (session('comment_status'))
-                <p class="comments-section__status">{{ session('comment_status') }}</p>
+                <div class="comments-section__status dismissible-notice" data-dismissible-notice>
+                    <span>{{ session('comment_status') }}</span>
+                    <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+                </div>
             @endif
 
             @auth

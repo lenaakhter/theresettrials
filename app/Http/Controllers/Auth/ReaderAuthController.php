@@ -42,6 +42,22 @@ class ReaderAuthController extends Controller
 
         $request->session()->regenerate();
 
+        if (Auth::user()->banned_until && now()->lessThan(Auth::user()->banned_until)) {
+            $hours = Auth::user()->ban_duration_hours
+                ?: (Auth::user()->banned_until && Auth::user()->ban_started_at
+                    ? Auth::user()->banned_until->diffInHours(Auth::user()->ban_started_at)
+                    : null)
+                ?: 0;
+
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')
+                ->with('ban_popup', 'This user has been banned for '.$hours.' hours, see email for reason.')
+                ->withInput(['login' => $credentials['login']]);
+        }
+
         if (! Auth::user()->hasRequiredProfileInfo()) {
             return redirect()->route('profile.complete.show');
         }

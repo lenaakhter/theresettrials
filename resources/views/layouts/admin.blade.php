@@ -29,5 +29,18 @@
     <main class="app-body">
         @yield('content')
     </main>
+    <script>
+        document.addEventListener('click', (event) => {
+            const closeButton = event.target.closest('[data-notice-close]');
+            if (!closeButton) {
+                return;
+            }
+
+            const notice = closeButton.closest('[data-dismissible-notice]');
+            if (notice) {
+                notice.remove();
+            }
+        });
+    </script>
 </body>
 </html>

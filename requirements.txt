@@ -1,0 +1,33 @@
+The Reset Trials - Project Requirements and Quick Setup
+
+This project is a Laravel + Vite app (not a Python package).
+Use the commands below to install dependencies and run locally.
+
+Required software:
+- PHP 8.2+
+- Composer 2+
+- Node.js 20+ (npm included)
+- SQLite (default) or another DB supported by Laravel
+
+Quick setup (fresh clone):
+1) composer install
+2) copy .env.example .env
+3) php artisan key:generate
+4) php artisan migrate
+5) npm install
+6) npm run build
+
+Run app locally:
+- Option A (single command with server + vite + queue + logs):
+  composer run dev
+
+- Option B (separate terminals):
+  php artisan serve
+  npm run dev
+
+Optional sample data:
+- php artisan db:seed
+- php artisan db:seed --class=DummyPostSeeder
+
+Admin/category bootstrap used in this repo (optional):
+- php artisan tinker --execute="App\Models\PostCategory::firstOrCreate(['name'=>'Supplements']); App\Models\PostCategory::firstOrCreate(['name'=>'Lifestyle']); App\Models\PostCategory::firstOrCreate(['name'=>'Nutrition']); App\Models\PostCategory::firstOrCreate(['name'=>'Exercise']); App\Models\PostCategory::firstOrCreate(['name'=>'Hormones']); App\Models\PostCategory::firstOrCreate(['name'=>'Low-Maintenance Habits']);"

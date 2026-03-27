@@ -3,10 +3,15 @@
 @section('content')
 <section class="blog-index">
     <div class="blog-index__header">
-        <h1 class="blog-index__title">{{ $category ? $category : 'All Posts' }}</h1>
-        <p class="blog-index__subtitle">
-            {{ $category ? 'Posts filed under '.$category.'.' : 'Experiments, notes, and practical updates from The Reset Trials.' }}
-        </p>
+        <div>
+            <h1 class="blog-index__title">{{ $category ? $category : 'All Posts' }}</h1>
+            <p class="blog-index__subtitle">
+                {{ $category ? 'Posts filed under '.$category.'.' : 'Experiments, notes, and practical updates from The Reset Trials.' }}
+            </p>
+        </div>
+        @if (auth()->check() && auth()->user()->is_admin)
+            <a href="{{ route('admin.posts.create') }}" class="inline-admin-btn">+ New Post</a>
+        @endif
     </div>
 
     @if (! $category)
@@ -60,6 +65,9 @@
                     @endif
                     @if ($post->excerpt)
                         <p class="post-card__excerpt">{{ $post->excerpt }}</p>
+                    @endif
+                    @if (auth()->check() && auth()->user()->is_admin)
+                        <a href="{{ route('admin.posts.edit', $post) }}" class="inline-admin-btn inline-admin-btn--small">Edit</a>
                     @endif
                 </div>
             </article>

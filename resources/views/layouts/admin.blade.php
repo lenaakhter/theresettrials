@@ -12,6 +12,7 @@
     <nav class="admin-navbar">
         <h2>Admin Lair</h2>
         <ul class="admin-nav-items">
+            <li><a href="{{ route('admin.posts.index') }}">Posts</a></li>
             <li><a href="{{ route('admin.posts.create') }}">New Post</a></li>
             <li><a href="{{ route('admin.experiments.index') }}">Experiments</a></li>
             <li><a href="{{ route('admin.resources.index') }}">Resources</a></li>

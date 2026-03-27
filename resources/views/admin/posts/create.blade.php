@@ -23,7 +23,7 @@
             </div>
         @endif
 
-        <section class="admin-layout">
+        <section class="admin-layout admin-layout--single">
             <form method="POST" action="{{ route('admin.posts.store') }}" class="admin-editor" enctype="multipart/form-data">
                 @csrf
 
@@ -54,20 +54,6 @@
 
                 <button type="submit" class="admin-form__button">Save Post</button>
             </form>
-
-            <aside class="admin-recent">
-                <h2 class="admin-recent__title">Recent Posts</h2>
-                @forelse ($recentPosts as $post)
-                    <div class="admin-recent__item">
-                        <p class="admin-recent__item-title">
-                            <a href="{{ route('admin.posts.edit', $post) }}" class="admin-recent__item-link">{{ $post->title }}</a>
-                        </p>
-                        <p class="admin-recent__item-meta">/{{ $post->slug }}</p>
-                    </div>
-                @empty
-                    <p class="admin-recent__empty">No posts yet.</p>
-                @endforelse
-            </aside>
         </section>
     </main>
 @endsection

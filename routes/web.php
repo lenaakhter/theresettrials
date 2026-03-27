@@ -135,6 +135,7 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
     });
 
     Route::middleware(['auth', 'not.banned', 'admin'])->group(function () {
+        Route::get('/posts', [PostManagementController::class, 'index'])->name('posts.index');
         Route::get('/posts/create', [PostManagementController::class, 'create'])->name('posts.create');
         Route::post('/posts', [PostManagementController::class, 'store'])->name('posts.store');
         Route::get('/posts/{post}/edit', [PostManagementController::class, 'edit'])->name('posts.edit');

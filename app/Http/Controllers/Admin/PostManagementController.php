@@ -11,13 +11,19 @@ use Illuminate\Support\Str;
 
 class PostManagementController extends Controller
 {
+    public function index()
+    {
+        $posts = Post::query()->latest('created_at')->get();
+
+        return view('admin.posts.index', compact('posts'));
+    }
+
     public function create()
     {
-        $recentPosts = Post::query()->latest('created_at')->take(6)->get();
         $subscriberCount = NewsletterSubscriber::query()->count();
         $categories = PostCategory::orderBy('name')->pluck('name');
 
-        return view('admin.posts.create', compact('recentPosts', 'subscriberCount', 'categories'));
+        return view('admin.posts.create', compact('subscriberCount', 'categories'));
     }
 
     public function store(Request $request)
@@ -42,12 +48,11 @@ class PostManagementController extends Controller
 
     public function edit(Post $post)
     {
-        $recentPosts  = Post::query()->latest('created_at')->take(6)->get();
         $resources    = $post->resources()->get();
         $allResources = \App\Models\Resource::orderBy('name')->get(['id', 'name']);
         $categories   = PostCategory::orderBy('name')->pluck('name');
 
-        return view('admin.posts.edit', compact('post', 'recentPosts', 'resources', 'allResources', 'categories'));
+        return view('admin.posts.edit', compact('post', 'resources', 'allResources', 'categories'));
     }
 
     public function update(Request $request, Post $post)

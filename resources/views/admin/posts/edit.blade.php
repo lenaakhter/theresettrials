@@ -115,19 +115,7 @@
                 </div>
             </div>
 
-            <aside class="admin-recent">
-                <h2 class="admin-recent__title">Recent Posts</h2>
-                @forelse ($recentPosts as $recentPost)
-                    <div class="admin-recent__item">
-                        <p class="admin-recent__item-title">
-                            <a href="{{ route('admin.posts.edit', $recentPost) }}" class="admin-recent__item-link">{{ $recentPost->title }}</a>
-                        </p>
-                        <p class="admin-recent__item-meta">/{{ $recentPost->slug }}</p>
-                    </div>
-                @empty
-                    <p class="admin-recent__empty">No posts yet.</p>
-                @endforelse
-            </aside>
+
         </section>
     </main>
 @endsection

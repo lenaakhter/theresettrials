@@ -583,6 +583,39 @@ base colours
     margin-right: auto;
 }
 
+.blog-index__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.inline-admin-btn {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    border: 1.5px solid #c56a7f;
+    border-radius: 20px;
+    color: #c56a7f;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+}
+
+.inline-admin-btn:hover {
+    background: #c56a7f;
+    color: #fff;
+}
+
+.inline-admin-btn--small {
+    margin-top: 0.6rem;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.78rem;
+}
+
+
 .blog-index__title,
 .post-single__title {
     margin: 0;
@@ -1988,6 +2021,70 @@ base colours
     color: #8C7B7F;
     font-weight: 700;
 }
+
+.admin-table__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.admin-table__title-link {
+    color: #2B2B2B;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.admin-table__title-link:hover {
+    color: #c56a7f;
+}
+
+.admin-table__edit-btn {
+    padding: 0.25rem 0.7rem;
+    border: 1.5px solid #c56a7f;
+    border-radius: 20px;
+    color: #c56a7f;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.admin-table__edit-btn:hover {
+    background: #c56a7f;
+    color: #fff;
+}
+
+.admin-table__delete-btn {
+    padding: 0.25rem 0.7rem;
+    border: 1.5px solid #b85c5c;
+    border-radius: 20px;
+    color: #b85c5c;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+}
+
+.admin-table__delete-btn:hover {
+    background: #b85c5c;
+    color: #fff;
+}
+
+.admin-table__empty {
+    text-align: center;
+    color: #8C7B7F;
+    padding: 2rem 0;
+}
+
+.admin-layout--single {
+    display: block;
+}
+
 
 .admin-pagination {
     margin-top: 1rem;

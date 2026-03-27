@@ -24,7 +24,7 @@
         @endif
 
         <section class="admin-layout">
-            <form method="POST" action="{{ route('admin.posts.store') }}" class="admin-editor">
+            <form method="POST" action="{{ route('admin.posts.store') }}" class="admin-editor" enctype="multipart/form-data">
                 @csrf
 
                 <label for="title" class="admin-form__label">Title</label>
@@ -36,8 +36,9 @@
                 <label for="content" class="admin-form__label">Post Content</label>
                 <textarea id="content" name="content" rows="12" required class="admin-form__textarea">{{ old('content') }}</textarea>
 
-                <label for="cover_image" class="admin-form__label">Cover Image Path (optional)</label>
-                <input id="cover_image" name="cover_image" type="text" value="{{ old('cover_image') }}" placeholder="images/reading.PNG" class="admin-form__input">
+                <label for="cover_image_upload" class="admin-form__label">Cover Image (optional)</label>
+                <input id="cover_image_upload" name="cover_image_upload" type="file" accept="image/*" class="admin-form__input">
+                <p class="admin-posts__subtitle" style="margin: -0.35rem 0 0.5rem;">Upload JPG, PNG, WEBP, or GIF (max 4MB).</p>
 
                 <label for="category" class="admin-form__label">Category (optional)</label>
                 <input id="category" name="category" type="text" value="{{ old('category') }}" placeholder="Supplements" class="admin-form__input">

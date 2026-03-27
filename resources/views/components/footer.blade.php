@@ -26,7 +26,7 @@
                     <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
                 </div>
             @else
-                <form action="{{ route('feedback.store') }}" method="POST" class="site-footer__form">
+                <form action="{{ route('feedback.store') }}" method="POST" class="site-footer__form" id="feedback-form" novalidate>
                     @csrf
                     <input
                         type="text"
@@ -43,16 +43,52 @@
                         class="site-footer__textarea"
                         rows="4"
                     ></textarea>
-                    @error('message')
-                        <div class="site-footer__error dismissible-notice" data-dismissible-notice>
-                            <span>{{ $message }}</span>
-                            <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
-                        </div>
-                    @enderror
+                    <div id="feedback-error" class="site-footer__error dismissible-notice" style="display:none;" data-dismissible-notice>
+                        <span id="feedback-error-text"></span>
+                        <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+                    </div>
                     <button type="submit" class="site-footer__submit">Send feedback</button>
                 </form>
+                <div id="feedback-thanks" class="site-footer__thanks dismissible-notice" style="display:none;" data-dismissible-notice>
+                    <span>Thanks! Your message means a lot ✨</span>
+                    <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+                </div>
             @endif
         </div>
+
+        <script>
+        (function () {
+            var form = document.getElementById('feedback-form');
+            if (!form) return;
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var btn = form.querySelector('[type="submit"]');
+                btn.disabled = true;
+                var errorBox = document.getElementById('feedback-error');
+                errorBox.style.display = 'none';
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    body: new FormData(form),
+                })
+                .then(function (res) {
+                    if (!res.ok) throw new Error('Server error');
+                    return res.json();
+                })
+                .then(function (data) {
+                    if (data.success) {
+                        form.style.display = 'none';
+                        document.getElementById('feedback-thanks').style.display = 'flex';
+                    }
+                })
+                .catch(function () {
+                    document.getElementById('feedback-error-text').textContent = 'Something went wrong. Please try again.';
+                    errorBox.style.display = 'flex';
+                    btn.disabled = false;
+                });
+            });
+        })();
+        </script>
 
     </div>
 

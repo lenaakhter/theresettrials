@@ -7,6 +7,25 @@
         <p style="color: #8C7B7F; margin: 0.5rem 0 0;">{{ $experiment->description }}</p>
     </div>
 
+
+    @if ($experimentResources->isNotEmpty() && !$experiment->archived)
+        <div class="experiment-timeline__header" style="margin-bottom: 1.5rem;">
+            <div class="product-box product-box--experiment product-box--currently-testing">
+                <h3 class="product-box__title">Currently Testing</h3>
+                <div class="product-box__list">
+                    @foreach ($experimentResources as $res)
+                        <a href="{{ $res->product_url }}" target="_blank" rel="noopener" class="product-box__item">
+                            @if ($res->image_url)
+                                <img src="{{ $res->image_url }}" alt="{{ $res->name }}" class="product-box__img">
+                            @endif
+                            <span class="product-box__name">{{ $res->name }}</span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="experiment-timeline__grid">
         <!-- Timeline with circles -->
         <div class="experiment-timeline__line">
@@ -194,6 +213,16 @@
                         submitButton.disabled = false;
                     }
                 }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key !== 'Enter' || event.shiftKey) return;
+                const textarea = event.target.closest('.comment-form__textarea');
+                if (!textarea) return;
+                const form = textarea.closest('form[data-async-comment-form]');
+                if (!form) return;
+                event.preventDefault();
+                form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
             });
         })();
     </script>

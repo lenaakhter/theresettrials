@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminUserManagementController;
 use App\Http\Controllers\Admin\PostManagementController;
 use App\Http\Controllers\Admin\SubscriberManagementController;
 use App\Http\Controllers\Admin\ExperimentController as AdminExperimentController;
+use App\Http\Controllers\Admin\ResourceController as AdminResourceController;
 use App\Http\Controllers\Auth\ReaderAuthController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\CommentController;
@@ -49,7 +50,20 @@ Route::get('/disclaimer', function () {
 })->name('disclaimer');
 
 Route::get('/resources', function () {
-    return view('resources');
+    $currentlyTesting = \App\Models\Resource::with('linkable')
+        ->where('linkable_type', \App\Models\Experiment::class)
+        ->whereHas('linkable', fn ($q) => $q->where('archived', false)->where('status', 'active'))
+        ->latest()
+        ->get();
+
+    $currentlyTestingIds = $currentlyTesting->pluck('id');
+
+    $resources = \App\Models\Resource::with('linkable')
+        ->whereNotIn('id', $currentlyTestingIds)
+        ->latest()
+        ->get();
+
+    return view('resources', compact('resources', 'currentlyTesting'));
 })->name('resources');
 
 Route::redirect('/contact', '/disclaimer');
@@ -131,6 +145,15 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::put('/experiments/{experiment}', [AdminExperimentController::class, 'update'])->name('experiments.update');
         Route::delete('/experiments/{experiment}', [AdminExperimentController::class, 'destroy'])->name('experiments.destroy');
         Route::patch('/experiments/{experiment}/archive', [AdminExperimentController::class, 'archive'])->name('experiments.archive');
+        Route::get('/resources', [AdminResourceController::class, 'index'])->name('resources.index');
+        Route::get('/resources/create', [AdminResourceController::class, 'create'])->name('resources.create');
+        Route::post('/resources', [AdminResourceController::class, 'store'])->name('resources.store');
+        Route::get('/resources/{resource}/edit', [AdminResourceController::class, 'edit'])->name('resources.edit');
+        Route::put('/resources/{resource}', [AdminResourceController::class, 'update'])->name('resources.update');
+        Route::delete('/resources/{resource}', [AdminResourceController::class, 'destroy'])->name('resources.destroy');
+        Route::post('/posts/{post}/resources', [AdminResourceController::class, 'storeForPost'])->name('posts.resources.store');
+        Route::post('/experiments/{experiment}/resources', [AdminResourceController::class, 'storeForExperiment'])->name('experiments.resources.store');
+        Route::delete('/resources/{resource}/inline', [AdminResourceController::class, 'destroyInline'])->name('resources.destroy-inline');
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
     });
 });

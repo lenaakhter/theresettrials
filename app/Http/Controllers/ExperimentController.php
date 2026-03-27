@@ -33,7 +33,9 @@ class ExperimentController extends Controller
                 ->all();
         }
 
-        return view('experiments.show', compact('experiment', 'comments', 'likedCommentIds'));
+        $experimentResources = $experiment->resources()->get();
+
+        return view('experiments.show', compact('experiment', 'comments', 'likedCommentIds', 'experimentResources'));
     }
 
     public function comment(Request $request, Experiment $experiment)

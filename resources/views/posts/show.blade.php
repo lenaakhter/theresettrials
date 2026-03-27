@@ -6,8 +6,25 @@
         <p class="post-single__meta">{{ optional($post->published_at)->format('M d, Y') }}</p>
         <h1 class="post-single__title">{{ $post->title }}</h1>
 
-        @if ($post->cover_image)
-            <img src="{{ asset($post->cover_image) }}" alt="{{ $post->title }}" class="post-single__image">
+        @if ($post->cover_image_url)
+            <img src="{{ $post->cover_image_url }}" alt="{{ $post->title }}" class="post-single__image">
+        @endif
+
+
+        @if ($postResources->isNotEmpty())
+            <div class="product-box">
+                <h3 class="product-box__title">Products used in this post</h3>
+                <div class="product-box__list">
+                    @foreach ($postResources as $res)
+                        <a href="{{ $res->product_url }}" target="_blank" rel="noopener" class="product-box__item">
+                            @if ($res->image_url)
+                                <img src="{{ $res->image_url }}" alt="{{ $res->name }}" class="product-box__img">
+                            @endif
+                            <span class="product-box__name">{{ $res->name }}</span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
         @endif
 
         <div class="post-single__content">
@@ -143,6 +160,16 @@ document.addEventListener('submit', async (event) => {
         }
     }
 });
+
+document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' || event.shiftKey) return;
+    const textarea = event.target.closest('.comment-form__textarea');
+    if (!textarea) return;
+    const form = textarea.closest('form[data-async-comment-form]');
+    if (!form) return;
+    event.preventDefault();
+    form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+});
 </script>
 
 @if ($latestPosts->isNotEmpty())
@@ -160,8 +187,8 @@ document.addEventListener('submit', async (event) => {
             @endphp
             <article class="latest-post{{ $tile ? ' latest-post--'.$tile : '' }}">
                 <a href="{{ route('posts.show', $latestPost) }}" class="latest-post__image-wrap">
-                    @if ($latestPost->cover_image)
-                        <img src="{{ asset($latestPost->cover_image) }}" alt="{{ $latestPost->title }}" class="latest-post__image">
+                    @if ($latestPost->cover_image_url)
+                        <img src="{{ $latestPost->cover_image_url }}" alt="{{ $latestPost->title }}" class="latest-post__image">
                     @endif
                 </a>
                 <div class="latest-post__body">

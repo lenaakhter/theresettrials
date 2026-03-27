@@ -54,6 +54,57 @@
             </div>
         </form>
     </section>
+
+    <section class="admin-products">
+        <h2 class="admin-products__title">Products / Resources</h2>
+
+        @if (session('status'))
+            <div class="admin-flash admin-flash--success" data-flash>
+                <span>{{ session('status') }}</span>
+                <button type="button" class="admin-flash__close" data-flash-close aria-label="Dismiss notification">&times;</button>
+            </div>
+        @endif
+
+        @if ($resources->isNotEmpty())
+            <div class="admin-resource-list">
+                @foreach ($resources as $resource)
+                    <div class="admin-resource-card">
+                        @if ($resource->image_url)
+                            <img src="{{ $resource->image_url }}" alt="{{ $resource->name }}" class="admin-resource-card__img">
+                        @endif
+                        <div class="admin-resource-card__body">
+                            <p class="admin-resource-card__name">{{ $resource->name }}</p>
+                            <a href="{{ $resource->product_url }}" target="_blank" rel="noopener noreferrer" class="admin-resource-card__link">View product</a>
+                        </div>
+                        <form method="POST" action="{{ route('admin.resources.destroy-inline', $resource) }}" onsubmit="return confirm('Unlink this product?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="admin-resource-card__delete" title="Unlink">&times;</button>
+                        </form>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="admin-posts__subtitle">No products linked yet.</p>
+        @endif
+
+        <h3 class="admin-products__subtitle">Link an existing product</h3>
+        @if ($allResources->isEmpty())
+            <p class="admin-posts__subtitle">No products in the system yet. <a href="{{ route('admin.resources.create') }}" style="color:#c56a7f;">Add one here.</a></p>
+        @else
+            <form method="POST" action="{{ route('admin.experiments.resources.store', $experiment) }}" class="admin-products__form">
+                @csrf
+                <select name="resource_id" required class="admin-form__input">
+                    <option value="">— Select a product —</option>
+                    @foreach ($allResources as $r)
+                        <option value="{{ $r->id }}">{{ $r->name }}</option>
+                    @endforeach
+                </select>
+                <button type="submit" class="admin-form__button">Link Product</button>
+            </form>
+            <p class="admin-posts__subtitle" style="margin-top:0.5rem;">Need a new product? <a href="{{ route('admin.resources.create') }}" style="color:#c56a7f;">Create one in Resources.</a></p>
+        @endif
+    </section>
 </main>
 
 <script>

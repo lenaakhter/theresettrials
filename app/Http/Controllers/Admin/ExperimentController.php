@@ -62,7 +62,9 @@ class ExperimentController extends Controller
 
     public function edit(Experiment $experiment)
     {
-        return view('admin.experiments.edit', compact('experiment'));
+        $resources    = $experiment->resources()->get();
+        $allResources = \App\Models\Resource::orderBy('name')->get(['id', 'name']);
+        return view('admin.experiments.edit', compact('experiment', 'resources', 'allResources'));
     }
 
     public function update(Request $request, Experiment $experiment)

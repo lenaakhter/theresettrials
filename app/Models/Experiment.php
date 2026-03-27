@@ -35,4 +35,9 @@ class Experiment extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    public function resources()
+    {
+        return $this->morphMany(Resource::class, 'linkable');
+    }
 }

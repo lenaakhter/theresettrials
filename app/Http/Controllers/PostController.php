@@ -56,6 +56,8 @@ class PostController extends Controller
             ->take(4)
             ->get();
 
-        return view('posts.show', compact('post', 'latestPosts', 'comments', 'likedCommentIds'));
+        $postResources = $post->resources()->get();
+
+        return view('posts.show', compact('post', 'latestPosts', 'comments', 'likedCommentIds', 'postResources'));
     }
 }

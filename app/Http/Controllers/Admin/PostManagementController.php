@@ -23,13 +23,14 @@ class PostManagementController extends Controller
         $data = $request->validate($this->rules());
 
         $slug = $this->generateUniqueSlug($data['title']);
+        $coverImage = $this->saveCoverImageUpload($request);
 
         Post::query()->create([
             'title' => $data['title'],
             'slug' => $slug,
             'excerpt' => $data['excerpt'] ?? null,
             'content' => $data['content'],
-            'cover_image' => $data['cover_image'] ?? null,
+            'cover_image' => $coverImage,
             'category' => $data['category'] ?? null,
             'published_at' => $this->resolvePublishedAt($request, $data),
         ]);
@@ -39,20 +40,23 @@ class PostManagementController extends Controller
 
     public function edit(Post $post)
     {
-        $recentPosts = Post::query()->latest('created_at')->take(6)->get();
+        $recentPosts  = Post::query()->latest('created_at')->take(6)->get();
+        $resources    = $post->resources()->get();
+        $allResources = \App\Models\Resource::orderBy('name')->get(['id', 'name']);
 
-        return view('admin.posts.edit', compact('post', 'recentPosts'));
+        return view('admin.posts.edit', compact('post', 'recentPosts', 'resources', 'allResources'));
     }
 
     public function update(Request $request, Post $post)
     {
         $data = $request->validate($this->rules());
+        $coverImage = $this->saveCoverImageUpload($request, $post->cover_image);
 
         $post->update([
             'title' => $data['title'],
             'excerpt' => $data['excerpt'] ?? null,
             'content' => $data['content'],
-            'cover_image' => $data['cover_image'] ?? null,
+            'cover_image' => $coverImage,
             'category' => $data['category'] ?? null,
             'published_at' => $this->resolvePublishedAt($request, $data),
         ]);
@@ -73,11 +77,37 @@ class PostManagementController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'content' => ['required', 'string'],
-            'cover_image' => ['nullable', 'string', 'max:255'],
+            'cover_image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:4096'],
             'category' => ['nullable', 'string', 'max:100'],
             'published_at' => ['nullable', 'date'],
             'publish_now' => ['nullable', 'boolean'],
         ];
+    }
+
+    private function saveCoverImageUpload(Request $request, ?string $currentPath = null): ?string
+    {
+        if (! $request->hasFile('cover_image_upload')) {
+            return $currentPath;
+        }
+
+        $file = $request->file('cover_image_upload');
+        $directory = public_path('images/uploads/posts');
+
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $filename = Str::uuid()->toString().'.'.$file->getClientOriginalExtension();
+        $file->move($directory, $filename);
+
+        if ($currentPath && str_starts_with($currentPath, 'images/uploads/posts/')) {
+            $oldPath = public_path($currentPath);
+            if (is_file($oldPath)) {
+                @unlink($oldPath);
+            }
+        }
+
+        return 'images/uploads/posts/'.$filename;
     }
 
     private function resolvePublishedAt(Request $request, array $data)

@@ -798,6 +798,457 @@ base colours
     line-height: 1.6;
 }
 
+/* ─── Static Pages (About / Disclaimer) ─────────────────────── */
+.static-page {
+    max-width: 720px;
+    margin: 3rem auto;
+    padding: 0 1.5rem 4rem;
+}
+
+.static-page__inner {
+    background: #fff;
+    border: 1.5px solid #EFD8DF;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+}
+
+.static-page__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #c56a7f;
+    margin: 0 0 1rem;
+}
+
+.static-page__subtitle {
+    color: #8C7B7F;
+    margin: 0 0 1.5rem;
+    font-size: 1rem;
+}
+
+.static-page__coming-soon {
+    color: #9a8a8e;
+    font-style: italic;
+    margin: 0;
+}
+
+.static-page__body p {
+    color: #5A5A5A;
+    line-height: 1.75;
+    margin: 0 0 0.9rem;
+}
+
+.static-page__body p:last-child {
+    margin-bottom: 0;
+}
+
+/* ─── Public Resources Grid ──────────────────────────────────── */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.resource-card {
+    background: #fff;
+    border: 1.5px solid #EFD8DF;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s;
+}
+
+.resource-card:hover {
+    box-shadow: 0 4px 18px rgba(154, 78, 97, 0.12);
+}
+
+.resource-card__img-link {
+    display: block;
+    background: #faf5f7;
+}
+
+.resource-card__img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    padding: 0.75rem;
+}
+
+.resource-card__body {
+    padding: 0.9rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+}
+
+.resource-card__name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #3a2932;
+    margin: 0;
+}
+
+.resource-card__buy-link {
+    display: inline-block;
+    background: #c56a7f;
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    text-decoration: none;
+    margin-top: 0.25rem;
+    align-self: flex-start;
+    transition: background 0.2s;
+}
+
+.resource-card__buy-link:hover {
+    background: #a8566a;
+}
+
+.resource-card__linked-label {
+    font-size: 0.8rem;
+    color: #c56a7f;
+    text-decoration: none;
+    margin-top: 0.15rem;
+}
+
+.resource-card__linked-label:hover {
+    text-decoration: underline;
+}
+
+/* ─── Product Box on Post / Experiment pages ─────────────────── */
+.product-box {
+    background: #fdf5f7;
+    border: 1.5px solid #EFD8DF;
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+    margin: 1.25rem 0 1.5rem;
+}
+
+.product-box--experiment {
+    margin: 0 0 1.5rem;
+}
+
+.product-box--currently-testing {
+    border-color: #c56a7f;
+    background: #fff8f9;
+}
+
+.product-box--currently-testing .product-box__title {
+    color: #c56a7f;
+    font-size: 0.85rem;
+}
+
+.product-box__title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #9a8a8e;
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+}
+
+.product-box__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.product-box__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid #EFD8DF;
+    border-radius: 10px;
+    padding: 0.4rem 0.75rem 0.4rem 0.4rem;
+    text-decoration: none;
+    color: #3a2932;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.product-box__item:hover {
+    border-color: #c56a7f;
+    box-shadow: 0 2px 8px rgba(154, 78, 97, 0.1);
+}
+
+.product-box__img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #fdf5f7;
+}
+
+.product-box__name {
+    line-height: 1.2;
+}
+
+/* ─── Admin Resource List ────────────────────────────────────── */
+.admin-btn {
+    display: inline-block;
+    padding: 0.45rem 1.1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+}
+
+.admin-btn--primary {
+    background: #c56a7f;
+    color: #fff;
+}
+
+.admin-btn--primary:hover {
+    background: #a8566a;
+}
+
+.admin-btn--secondary {
+    background: #EFD8DF;
+    color: #3a2932;
+}
+
+.admin-btn--secondary:hover {
+    background: #e3c5ce;
+}
+
+.admin-btn--sm {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.78rem;
+    background: #EFD8DF;
+    color: #3a2932;
+    border-radius: 14px;
+}
+
+.admin-btn--sm:hover {
+    background: #e3c5ce;
+}
+
+.admin-btn--danger {
+    background: #f5c5cc;
+    color: #8a2832;
+}
+
+.admin-btn--danger:hover {
+    background: #e8a0aa;
+}
+
+.admin-resource-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 1.25rem;
+}
+
+.admin-resource-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #fff;
+    border: 1.5px solid #EFD8DF;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+}
+
+.admin-resource-card__img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #faf5f7;
+    flex-shrink: 0;
+}
+
+.admin-resource-card__img--placeholder {
+    background: #EFD8DF;
+}
+
+.admin-resource-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-resource-card__name {
+    color: #3a2932;
+    font-size: 0.95rem;
+}
+
+.admin-resource-card__url {
+    font-size: 0.78rem;
+    color: #c56a7f;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.admin-resource-card__linked {
+    font-size: 0.78rem;
+    color: #8C7B7F;
+    text-decoration: none;
+}
+
+.admin-resource-card__linked:hover {
+    text-decoration: underline;
+    color: #c56a7f;
+}
+
+.admin-resource-card__no-link {
+    font-size: 0.78rem;
+    color: #bbb;
+}
+
+.admin-resource-card__actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.admin-resource-card__link {
+    font-size: 0.78rem;
+    color: #c56a7f;
+    text-decoration: none;
+}
+
+.admin-resource-card__link:hover {
+    text-decoration: underline;
+}
+
+.admin-resource-card__delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #bbb;
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 0 0.25rem;
+    flex-shrink: 0;
+    transition: color 0.15s;
+}
+
+.admin-resource-card__delete:hover {
+    color: #c56a7f;
+}
+
+.admin-editor-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.admin-products {
+    background: #EFE8EB;
+    border: 1px solid #E2D9DD;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.admin-products__title {
+    font-size: 1.15rem;
+    color: #3a2932;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.admin-products__subtitle {
+    font-size: 0.95rem;
+    color: #3a2932;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.admin-products__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-width: 500px;
+}
+
+.info-page {
+    position: relative;
+    padding: 2.5rem 1.25rem 3.5rem;
+}
+
+.info-page__inner {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.info-page__hero {
+    margin-bottom: 1rem;
+}
+
+.info-page__kicker {
+    margin: 0;
+    color: #b46d7f;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.info-page__title {
+    margin: 0.35rem 0 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.1rem;
+    color: #c56a7f;
+}
+
+.info-page__panel {
+    background: linear-gradient(160deg, #fff 0%, #fdf7f9 100%);
+    border: 1px solid #e9d5dc;
+    border-radius: 18px;
+    padding: 1.35rem 1.5rem;
+    box-shadow: 0 12px 24px rgba(171, 117, 130, 0.1);
+}
+
+.info-page__panel p {
+    margin: 0;
+    color: #5A5A5A;
+    line-height: 1.75;
+}
+
+.disclaimer-note {
+    margin-top: 1rem;
+    background: #fff2f4;
+    border: 1px solid #efc7d0;
+    border-radius: 14px;
+    padding: 0.95rem 1rem;
+    color: #7f3f52;
+    font-weight: 600;
+}
+
+.resources-page__grid {
+    margin-top: 1.1rem;
+}
+
+@media (max-width: 767px) {
+    .info-page {
+        padding: 1.7rem 0.8rem 2.2rem;
+    }
+
+    .info-page__title {
+        font-size: 1.75rem;
+    }
+
+    .info-page__panel {
+        padding: 1rem 1rem;
+        border-radius: 14px;
+    }
+}
+
 .blog-featured-card__meta {
     margin: 0.75rem 0 0;
     color: #8b6c63;
@@ -838,6 +1289,11 @@ base colours
     position: absolute;
     inset: 0;
     background: #E7DDE1;
+}
+
+.post-card__title a {
+    color: inherit;
+    text-decoration: none;
 }
 
 .post-card__image {

@@ -34,8 +34,8 @@
                 @endphp
                 <article class="latest-post{{ $tile ? ' latest-post--'.$tile : '' }}">
                     <a href="{{ route('posts.show', $post) }}" class="latest-post__image-wrap">
-                        @if ($post->cover_image)
-                            <img src="{{ asset($post->cover_image) }}" alt="{{ $post->title }}" class="latest-post__image">
+                        @if ($post->cover_image_url)
+                            <img src="{{ $post->cover_image_url }}" alt="{{ $post->title }}" class="latest-post__image">
                         @endif
                     </a>
 

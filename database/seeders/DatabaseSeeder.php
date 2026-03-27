@@ -26,5 +26,12 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             ExperimentSeeder::class,
         ]);
+
+        if (app()->environment('local')) {
+            $this->call([
+                DummyPostSeeder::class,
+                DummyResourceSeeder::class,
+            ]);
+        }
     }
 }

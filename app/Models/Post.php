@@ -31,8 +31,26 @@ class Post extends Model
         return $query->whereNotNull('published_at')->where('published_at', '<=', now());
     }
 
+    public function getCoverImageUrlAttribute(): ?string
+    {
+        if (! $this->cover_image) {
+            return null;
+        }
+
+        if (preg_match('/^https?:\/\//i', $this->cover_image)) {
+            return $this->cover_image;
+        }
+
+        return asset(ltrim($this->cover_image, '/'));
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function resources()
+    {
+        return $this->morphMany(Resource::class, 'linkable');
     }
 }

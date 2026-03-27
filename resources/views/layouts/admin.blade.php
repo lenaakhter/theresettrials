@@ -14,6 +14,7 @@
         <ul class="admin-nav-items">
             <li><a href="{{ route('admin.posts.create') }}">New Post</a></li>
             <li><a href="{{ route('admin.experiments.index') }}">Experiments</a></li>
+            <li><a href="{{ route('admin.resources.index') }}">Resources</a></li>
             <li><a href="{{ route('admin.subscribers.index') }}">Subscribers</a></li>
             <li><a href="{{ route('admin.admins.create') }}">New Admin</a></li>
             <li><a href="/" class="admin-toggle">← Back to Site</a></li>

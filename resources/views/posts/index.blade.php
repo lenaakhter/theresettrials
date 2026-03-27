@@ -43,8 +43,8 @@
         @forelse ($posts as $post)
             <article class="post-card">
                 <a href="{{ route('posts.show', $post) }}" class="post-card__image-wrap">
-                    @if ($post->cover_image)
-                        <img src="{{ asset($post->cover_image) }}" alt="{{ $post->title }}" class="post-card__image">
+                    @if ($post->cover_image_url)
+                        <img src="{{ $post->cover_image_url }}" alt="{{ $post->title }}" class="post-card__image">
                     @else
                         <div class="post-card__image post-card__image--placeholder"></div>
                     @endif

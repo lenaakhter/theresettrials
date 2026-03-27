@@ -166,6 +166,27 @@
                 <button type="button" class="admin-form__button" id="avatar-editor-done">Use this photo</button>
             </div>
         </div>
+
+        <div class="profile-danger-zone">
+            <h2 class="profile-danger-zone__title">Delete Account</h2>
+            <p class="profile-danger-zone__text">This will permanently delete your account and all your comments. This cannot be undone.</p>
+            <form method="POST" action="{{ route('profile.destroy') }}" id="delete-account-form">
+                @csrf
+                @method('DELETE')
+                <button type="button" class="profile-danger-zone__btn" id="delete-account-trigger">Delete My Account</button>
+            </form>
+        </div>
+
+        <div class="profile-delete-modal" id="profile-delete-modal" hidden>
+            <div class="profile-delete-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+                <h2 class="profile-delete-modal__title" id="delete-modal-title">Delete your account?</h2>
+                <p class="profile-delete-modal__text">This will permanently delete your account and all your comments. <strong>This cannot be undone.</strong></p>
+                <div class="profile-delete-modal__actions">
+                    <button type="button" class="profile-delete-modal__cancel" id="delete-modal-cancel">Cancel</button>
+                    <button type="button" class="profile-delete-modal__confirm" id="delete-modal-confirm">Yes, delete my account</button>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 @endsection
@@ -611,6 +632,32 @@
             field.addEventListener('change', () => syncInlineButton(field));
             syncInlineButton(field);
         });
+
+        // Delete account modal
+        const deleteModal = document.getElementById('profile-delete-modal');
+        const deleteTrigger = document.getElementById('delete-account-trigger');
+        const deleteCancel = document.getElementById('delete-modal-cancel');
+        const deleteConfirm = document.getElementById('delete-modal-confirm');
+        const deleteForm = document.getElementById('delete-account-form');
+
+        if (deleteModal && deleteTrigger && deleteCancel && deleteConfirm && deleteForm) {
+            deleteTrigger.addEventListener('click', () => {
+                deleteModal.hidden = false;
+                deleteModal.offsetHeight; // force reflow
+                deleteModal.classList.add('is-open');
+                deleteCancel.focus();
+            });
+
+            const closeDeleteModal = () => {
+                deleteModal.classList.remove('is-open');
+                deleteModal.addEventListener('transitionend', () => { deleteModal.hidden = true; }, { once: true });
+            };
+
+            deleteCancel.addEventListener('click', closeDeleteModal);
+            deleteConfirm.addEventListener('click', () => deleteForm.submit());
+            deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !deleteModal.hidden) closeDeleteModal(); });
+        }
     })();
 </script>
 @endpush

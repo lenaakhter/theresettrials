@@ -147,4 +147,29 @@ class SubscriberManagementController extends Controller
             'Content-Disposition' => 'attachment; filename='.$filename,
         ]);
     }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        if ($user->is_admin) {
+            return redirect()->route('admin.subscribers.index')
+                ->with('error', 'Admin accounts cannot be deleted. Revoke admin access first.');
+        }
+
+        if ($user->profile_photo) {
+            $photoPath = public_path($user->profile_photo);
+            if (is_file($photoPath)) {
+                @unlink($photoPath);
+            }
+        }
+
+        $name = $user->name;
+        // Clean up orphaned sessions and password reset tokens
+        \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
+        \Illuminate\Support\Facades\DB::table('password_reset_tokens')->where('email', $user->email)->delete();
+
+        $user->delete();
+
+        return redirect()->route('admin.subscribers.index')
+            ->with('status', "Account for \"{$name}\" has been permanently deleted.");
+    }
 }

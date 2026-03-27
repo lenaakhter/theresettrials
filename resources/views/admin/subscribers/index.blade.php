@@ -30,6 +30,13 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div class="reader-auth__error dismissible-notice" data-dismissible-notice>
+                    <span>{{ session('error') }}</span>
+                    <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+                </div>
+            @endif
+
             @if ($accounts->isEmpty())
                 <p class="admin-recent__empty">No accounts yet.</p>
             @else
@@ -45,6 +52,7 @@
                                 <th>Banned Until</th>
                                 <th>Joined</th>
                                 <th>Ban Controls</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,6 +91,17 @@
                                                     Ban account
                                                 </button>
                                             </div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if (! $account->is_admin)
+                                            <form method="POST" action="{{ route('admin.subscribers.destroy', $account) }}" onsubmit="return confirm('Permanently delete account for {{ addslashes($account->email) }}? All their comments will also be deleted. This cannot be undone.')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="admin-table__delete-btn">Delete</button>
+                                            </form>
+                                        @else
+                                            —
                                         @endif
                                     </td>
                                 </tr>

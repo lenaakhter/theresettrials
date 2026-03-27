@@ -23,6 +23,13 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="admin-flash admin-flash--error" data-flash>
+                <span>{{ session('error') }}</span>
+                <button type="button" class="admin-flash__close" data-flash-close aria-label="Dismiss notification">&times;</button>
+            </div>
+        @endif
+
         <section class="admin-layout">
             <form method="POST" action="{{ route('admin.admins.store') }}" class="admin-editor admin-form">
                 @csrf
@@ -46,8 +53,17 @@
                 <h2 class="admin-recent__title">Recent Admins</h2>
                 @forelse ($recentAdmins as $adminUser)
                     <div class="admin-recent__item">
-                        <p class="admin-recent__item-title">{{ $adminUser->name }}</p>
-                        <p class="admin-recent__item-meta">{{ $adminUser->email }}</p>
+                        <div>
+                            <p class="admin-recent__item-title">{{ $adminUser->name }}</p>
+                            <p class="admin-recent__item-meta">{{ $adminUser->email }}</p>
+                        </div>
+                        @if ($adminUser->id !== auth()->id())
+                            <form method="POST" action="{{ route('admin.admins.destroy', $adminUser) }}" onsubmit="return confirm('Revoke admin access for {{ addslashes($adminUser->name) }}?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="admin-recent__item-revoke">Revoke</button>
+                            </form>
+                        @endif
                     </div>
                 @empty
                     <p class="admin-recent__empty">No admin accounts yet.</p>

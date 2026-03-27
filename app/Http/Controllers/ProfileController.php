@@ -202,4 +202,28 @@ class ProfileController extends Controller
 
         return back()->with('status', 'Profile updated.');
     }
+
+    public function destroy(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($user->profile_photo) {
+            $photoPath = public_path($user->profile_photo);
+            if (is_file($photoPath)) {
+                @unlink($photoPath);
+            }
+        }
+
+        // Clean up orphaned sessions and password reset tokens
+        \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
+        \Illuminate\Support\Facades\DB::table('password_reset_tokens')->where('email', $user->email)->delete();
+
+        Auth::logout();
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('status', 'Your account has been deleted.');
+    }
 }

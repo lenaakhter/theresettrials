@@ -1956,6 +1956,135 @@ base colours
     padding: 1.5rem;
 }
 
+.profile-danger-zone {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid #e1b7c0;
+    border-radius: 12px;
+    background: #fdf5f6;
+}
+
+.profile-danger-zone__title {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #9a4e61;
+}
+
+.profile-danger-zone__text {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    color: #7a4050;
+}
+
+.profile-danger-zone__btn {
+    background: none;
+    border: 1.5px solid #b94a5a;
+    color: #b94a5a;
+    border-radius: 8px;
+    padding: 0.45rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 150ms, color 150ms;
+}
+
+.profile-danger-zone__btn:hover {
+    background: #b94a5a;
+    color: #fff;
+}
+
+/* Delete account modal */
+.profile-delete-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 15, 20, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9000;
+    opacity: 0;
+    transition: opacity 180ms ease;
+    padding: 1rem;
+}
+
+.profile-delete-modal[hidden] {
+    display: none;
+}
+
+.profile-delete-modal.is-open {
+    opacity: 1;
+}
+
+.profile-delete-modal__dialog {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem 1.75rem 1.5rem;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 12px 40px rgba(30, 15, 20, 0.22);
+    transform: translateY(10px);
+    transition: transform 180ms ease;
+}
+
+.profile-delete-modal.is-open .profile-delete-modal__dialog {
+    transform: translateY(0);
+}
+
+.profile-delete-modal__title {
+    margin: 0 0 0.6rem;
+    font-size: 1.15rem;
+    font-family: 'Playfair Display', serif;
+    color: #9a4e61;
+}
+
+.profile-delete-modal__text {
+    margin: 0 0 1.5rem;
+    font-size: 0.9rem;
+    color: #4a3038;
+    line-height: 1.55;
+}
+
+.profile-delete-modal__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.profile-delete-modal__cancel {
+    background: none;
+    border: 1.5px solid #D8C8CE;
+    color: #4a3038;
+    border-radius: 8px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 150ms, color 150ms;
+}
+
+.profile-delete-modal__cancel:hover {
+    border-color: #a07080;
+    color: #2B2B2B;
+}
+
+.profile-delete-modal__confirm {
+    background: #b94a5a;
+    border: 1.5px solid #b94a5a;
+    color: #fff;
+    border-radius: 8px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 150ms, border-color 150ms;
+}
+
+.profile-delete-modal__confirm:hover {
+    background: #8f2f3f;
+    border-color: #8f2f3f;
+}
+
 .reader-auth__title,
 .profile-page__title,
 .comments-section__title {
@@ -3395,6 +3524,23 @@ body.is-avatar-editor-open {
     font-size: 0.85rem;
 }
 
+.admin-table__delete-btn {
+    background: none;
+    border: 1px solid #b94a5a;
+    color: #b94a5a;
+    border-radius: 6px;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 150ms, color 150ms;
+    white-space: nowrap;
+}
+
+.admin-table__delete-btn:hover {
+    background: #b94a5a;
+    color: #fff;
+}
+
 .admin-table__row--banned td {
     background: #fdecef;
     border-top: 1px solid #efc1cb;
@@ -3457,6 +3603,27 @@ body.is-avatar-editor-open {
     border-top: 1px dashed #d8c8ce;
     padding-top: 0.7rem;
     margin-top: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.admin-recent__item-revoke {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid #c56a7f;
+    color: #c56a7f;
+    border-radius: 6px;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 150ms, color 150ms;
+}
+
+.admin-recent__item-revoke:hover {
+    background: #c56a7f;
+    color: #fff;
 }
 
 .admin-recent__item-title {

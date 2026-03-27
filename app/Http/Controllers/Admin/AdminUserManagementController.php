@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminUserManagementController extends Controller
 {
@@ -35,5 +36,16 @@ class AdminUserManagementController extends Controller
         ]);
 
         return redirect()->route('admin.admins.create')->with('status', 'Admin account created successfully.');
+    }
+
+    public function destroy(User $user)
+    {
+        if ($user->id === Auth::id()) {
+            return redirect()->route('admin.admins.create')->with('error', 'You cannot revoke your own admin access.');
+        }
+
+        $user->update(['is_admin' => false]);
+
+        return redirect()->route('admin.admins.create')->with('status', "{$user->name}'s admin access has been revoked.");
     }
 }

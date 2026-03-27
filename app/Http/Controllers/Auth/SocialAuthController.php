@@ -56,14 +56,12 @@ class SocialAuthController extends Controller
             ?: Str::slug($socialName, '_');
 
         if (!$user) {
-            // Create new user
+            // Create new user without display_name/username so they are
+            // required to complete their profile before accessing the site.
             $user = User::create([
                 'name' => $socialName,
                 'email' => $socialUser->getEmail(),
                 'password' => bcrypt(str()->random(24)), // Random password since they're using OAuth
-                'display_name' => $socialName,
-                'username' => $this->makeUniqueUsername($baseUsername),
-                'username_changed_at' => now(),
                 'email_notifications_opt_in' => false,
             ]);
         }

@@ -100,6 +100,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'not.banned', 'profile.complete'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/posts/{post:slug}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('/comments/{comment}/replies', [CommentController::class, 'reply'])->name('comments.reply');
     Route::post('/comments/{comment}/like', [CommentController::class, 'toggleLike'])->name('comments.like');
@@ -134,8 +135,10 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::get('/subscribers/export-excel', [SubscriberManagementController::class, 'exportExcel'])->name('subscribers.export-excel');
         Route::post('/subscribers/users/{user}/ban', [SubscriberManagementController::class, 'ban'])->name('subscribers.ban');
         Route::post('/subscribers/users/{user}/unban', [SubscriberManagementController::class, 'unban'])->name('subscribers.unban');
+        Route::delete('/subscribers/users/{user}', [SubscriberManagementController::class, 'destroy'])->name('subscribers.destroy');
         Route::get('/admins/create', [AdminUserManagementController::class, 'create'])->name('admins.create');
         Route::post('/admins', [AdminUserManagementController::class, 'store'])->name('admins.store');
+        Route::delete('/admins/{user}', [AdminUserManagementController::class, 'destroy'])->name('admins.destroy');
         Route::get('/experiments/{experiment}/add-entry', [AdminExperimentController::class, 'addEntry'])->name('experiments.add-entry');
         Route::post('/experiments/{experiment}/entries', [AdminExperimentController::class, 'storeEntry'])->name('experiments.store-entry');
         Route::get('/experiments', [AdminExperimentController::class, 'index'])->name('experiments.index');

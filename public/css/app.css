@@ -417,6 +417,35 @@ base colours
     color: #8C7B7F;
 }
 
+.content-empty-state {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1.4rem 1.1rem;
+    border-radius: 16px;
+    border: 1px solid #E2D9DD;
+    background: #F7F3F4;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.content-empty-state__image {
+    width: 110px;
+    height: auto;
+    object-fit: contain;
+}
+
+.content-empty-state__text {
+    margin: 0;
+    color: #8C7B7F;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
 .latest-posts__track {
     max-width: 1200px;
     margin: 0 auto;
@@ -692,6 +721,11 @@ base colours
     gap: 1.25rem;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     grid-auto-rows: 300px;
+}
+
+.posts-grid > .content-empty-state,
+.blog-featured-experiments > .content-empty-state {
+    grid-column: 1 / -1;
 }
 
 .post-card {
@@ -2590,6 +2624,11 @@ base colours
 
 .experimenting__item {
     width: 100%;
+}
+
+.content-empty-state--experimenting {
+    grid-column: 1 / -1;
+    min-height: 240px;
 }
 
 .experimenting__item > a {

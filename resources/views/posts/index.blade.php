@@ -9,25 +9,32 @@
         </p>
     </div>
 
-    @if (! $category && ($activeExperiments ?? collect())->isNotEmpty())
+    @if (! $category)
         <section class="blog-featured-experiments">
             <div class="blog-featured-experiments__header">
                 <h2 class="blog-featured-experiments__title">Currently Testing</h2>
                 <p class="blog-featured-experiments__subtitle">Currently ongoing</p>
             </div>
 
-            <div class="blog-featured-experiments__grid">
-                @foreach ($activeExperiments as $experiment)
-                    <article class="blog-featured-card">
-                        <div class="blog-featured-card__label">Currently ongoing</div>
-                        <h3 class="blog-featured-card__title">
-                            <a href="{{ route('experiments.show', $experiment) }}">{{ $experiment->title }}</a>
-                        </h3>
-                        <p class="blog-featured-card__excerpt">{{ $experiment->description }}</p>
-                        <p class="blog-featured-card__meta">Started {{ $experiment->start_date->format('M d, Y') }}</p>
-                    </article>
-                @endforeach
-            </div>
+            @if (($activeExperiments ?? collect())->isNotEmpty())
+                <div class="blog-featured-experiments__grid">
+                    @foreach ($activeExperiments as $experiment)
+                        <article class="blog-featured-card">
+                            <div class="blog-featured-card__label">Currently ongoing</div>
+                            <h3 class="blog-featured-card__title">
+                                <a href="{{ route('experiments.show', $experiment) }}">{{ $experiment->title }}</a>
+                            </h3>
+                            <p class="blog-featured-card__excerpt">{{ $experiment->description }}</p>
+                            <p class="blog-featured-card__meta">Started {{ $experiment->start_date->format('M d, Y') }}</p>
+                        </article>
+                    @endforeach
+                </div>
+            @else
+                <div class="content-empty-state content-empty-state--featured-experiments">
+                    <img src="{{ asset('images/reading.PNG') }}" alt="Reading illustration" class="content-empty-state__image">
+                    <p class="content-empty-state__text">There isn’t anything at the moment... watch this space 👀...</p>
+                </div>
+            @endif
         </section>
     @endif
 
@@ -55,7 +62,10 @@
                 </div>
             </article>
         @empty
-            <p class="posts-empty">No posts yet.</p>
+            <div class="content-empty-state posts-empty">
+                <img src="{{ asset('images/reading.PNG') }}" alt="Reading illustration" class="content-empty-state__image">
+                <p class="content-empty-state__text">There isn’t anything at the moment... watch this space 👀...</p>
+            </div>
         @endforelse
     </div>
 </section>

@@ -21,7 +21,10 @@
     </div>
 
     @if ($latestPosts->isEmpty())
-        <p class="latest-posts__empty">No posts yet. Run migrations and seeders to add starter posts.</p>
+        <div class="content-empty-state latest-posts__empty">
+            <img src="{{ asset('images/reading.PNG') }}" alt="Reading illustration" class="content-empty-state__image">
+            <p class="content-empty-state__text">There isn’t anything at the moment... watch this space 👀...</p>
+        </div>
     @else
         <div class="latest-posts__track" role="region" aria-label="Latest posts board">
             @foreach ($latestPosts as $post)
@@ -167,13 +170,9 @@
                     </div>
                 </a>
             @empty
-                <div class="experimenting__item">
-                    <div class="experimenting__card">
-                        <div class="experimenting__card-content">
-                            <h3 class="experimenting__card-title">No Experiments Yet</h3>
-                            <p class="experimenting__card-description">Check back soon for ongoing experiments!</p>
-                        </div>
-                    </div>
+                <div class="content-empty-state content-empty-state--experimenting">
+                    <img src="{{ asset('images/reading.PNG') }}" alt="Reading illustration" class="content-empty-state__image">
+                    <p class="content-empty-state__text">There isn’t anything at the moment... watch this space 👀...</p>
                 </div>
             @endforelse
         </div>

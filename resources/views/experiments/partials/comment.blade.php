@@ -1,18 +1,18 @@
 <article class="comment-item" style="margin-left: {{ $level * 1.2 }}rem;">
     <div class="comment-item__header">
-        @if ($comment->user->profile_photo)
+        @if ($comment->user?->profile_photo)
             <img src="{{ asset($comment->user->profile_photo) }}" alt="{{ $comment->user->comment_name }}" class="comment-item__avatar">
         @else
-            <div class="comment-item__avatar comment-item__avatar--placeholder">{{ strtoupper(substr($comment->user->comment_name, 0, 1)) }}</div>
+            <div class="comment-item__avatar comment-item__avatar--placeholder">{{ strtoupper(substr($comment->user->comment_name ?? 'U', 0, 1)) }}</div>
         @endif
 
         <div>
-            <p class="comment-item__name">{{ $comment->user->comment_name }}</p>
+            <p class="comment-item__name">{{ $comment->user->comment_name ?? 'Deleted user' }}</p>
             <p class="comment-item__time">{{ $comment->created_at->diffForHumans() }}</p>
         </div>
     </div>
 
-    <p class="comment-item__body">{{ $comment->body }}</p>
+    <p class="comment-item__body">{{ $comment->content }}</p>
 
     <div class="comment-item__actions">
         <p class="comment-item__likes" data-like-count="{{ $comment->id }}">{{ $comment->likes_count }} {{ $comment->likes_count === 1 ? 'like' : 'likes' }}</p>
@@ -36,10 +36,9 @@
     </div>
 
     @auth
-        <form method="POST" action="{{ route('comments.reply', $comment) }}" class="comment-form comment-form--reply comment-form--hidden" id="reply-{{ $comment->id }}" data-async-comment-form>
+        <form method="POST" action="{{ route('experiments.reply', [$experiment, $comment]) }}" class="comment-form comment-form--reply comment-form--hidden" id="reply-{{ $comment->id }}" data-async-comment-form>
             @csrf
-            <input type="hidden" name="post_slug" value="{{ $post->slug }}">
-            <textarea name="body" rows="2" required class="comment-form__textarea" placeholder="Write a reply..."></textarea>
+            <textarea name="content" rows="2" required class="comment-form__textarea" placeholder="Write a reply..."></textarea>
             <button type="submit" class="comment-form__button">Post reply</button>
         </form>
     @endauth
@@ -49,6 +48,6 @@
     @endif
 
     @foreach ($comment->repliesRecursive as $reply)
-        @include('posts.partials.comment', ['comment' => $reply, 'post' => $post, 'level' => $level + 1, 'likedCommentIds' => $likedCommentIds ?? []])
+        @include('experiments.partials.comment', ['comment' => $reply, 'experiment' => $experiment, 'level' => $level + 1, 'likedCommentIds' => $likedCommentIds ?? []])
     @endforeach
 </article>

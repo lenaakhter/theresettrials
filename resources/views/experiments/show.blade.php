@@ -51,42 +51,151 @@
     <!-- Comments Section -->
     <div class="experiment-comments">
         <h2 class="experiment-comments__title">Discussion</h2>
+
+        @if (session('success'))
+            <div class="comments-section__status dismissible-notice" data-dismissible-notice>
+                <span>{{ session('success') }}</span>
+                <button type="button" class="dismissible-notice__close" data-notice-close aria-label="Dismiss notification">&times;</button>
+            </div>
+        @endif
         
         @if(auth()->check())
-            <div style="background: #EFE8EB; border: 1px solid #E2D9DD; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
-                <form action="{{ route('experiments.comment', $experiment) }}" method="POST">
+            <div class="experiment-comments__composer">
+                <form action="{{ route('experiments.comment', $experiment) }}" method="POST" class="comment-form" data-async-comment-form>
                     @csrf
-                    <textarea 
-                        name="content" 
-                        placeholder="Share your thoughts..." 
-                        style="width: 100%; min-height: 100px; padding: 0.75rem; border: 1px solid #d5c7cc; border-radius: 8px; font-family: 'Quicksand', sans-serif; font-size: 0.95rem; resize: vertical;"
+                    <textarea
+                        name="content"
+                        rows="4"
                         required
+                        class="comment-form__textarea"
+                        placeholder="Share your thoughts..."
                     ></textarea>
-                    <button 
-                        type="submit" 
-                        style="margin-top: 0.75rem; padding: 0.5rem 1rem; background: #c56a7f; color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-family: 'Quicksand', sans-serif;"
-                    >
-                        Post Comment
-                    </button>
+                    <button type="submit" class="comment-form__button">Post comment</button>
                 </form>
             </div>
         @else
-            <p style="color: #8C7B7F; text-align: center;">
+            <p class="comment-item__login-hint" style="text-align: center; margin-top: 0;">
                 <a href="{{ route('login') }}" style="color: #c56a7f; text-decoration: underline;">Log in</a> to leave a comment
             </p>
         @endif
 
-        @forelse($experiment->comments()->latest()->get() as $comment)
-            <div style="background: #EFE8EB; border: 1px solid #E2D9DD; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                    <strong style="color: #2B2B2B;">{{ $comment->user->name }}</strong>
-                    <span style="color: #8C7B7F; font-size: 0.85rem;">{{ $comment->created_at->diffForHumans() }}</span>
-                </div>
-                <p style="margin: 0; color: #5A5A5A; line-height: 1.6;">{{ $comment->content }}</p>
-            </div>
+        <div class="experiment-comments__list">
+        @forelse($comments as $comment)
+            @include('experiments.partials.comment', ['comment' => $comment, 'experiment' => $experiment, 'level' => 0, 'likedCommentIds' => $likedCommentIds ?? []])
         @empty
             <p style="color: #8C7B7F; text-align: center;">No comments yet. Be the first to share!</p>
         @endforelse
+        </div>
     </div>
 </section>
+
+@auth
+    <script>
+        (() => {
+            const tokenNode = document.querySelector('meta[name="csrf-token"]');
+            if (!tokenNode) {
+                return;
+            }
+
+            const token = tokenNode.getAttribute('content');
+
+            document.addEventListener('click', (event) => {
+                const replyToggle = event.target.closest('[data-reply-toggle]');
+                if (replyToggle) {
+                    const formId = replyToggle.getAttribute('data-reply-toggle');
+                    const form = formId ? document.getElementById(formId) : null;
+                    if (form) {
+                        form.classList.toggle('comment-form--hidden');
+                    }
+
+                    return;
+                }
+
+                const likeBtn = event.target.closest('[data-like-btn]');
+                if (!likeBtn) {
+                    return;
+                }
+
+                const commentId = likeBtn.getAttribute('data-like-btn');
+                const url = likeBtn.getAttribute('data-like-url');
+
+                if (!commentId || !url) {
+                    return;
+                }
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token,
+                        'Accept': 'application/json',
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        likeBtn.setAttribute('data-liked', data.liked ? 'true' : 'false');
+
+                        const countEl = document.querySelector('[data-like-count="' + commentId + '"]');
+                        if (countEl) {
+                            const plural = data.likes_count === 1 ? 'like' : 'likes';
+                            countEl.textContent = data.likes_count + ' ' + plural;
+                        }
+                    })
+                    .catch(() => {
+                        // Keep the current UI state if a like request fails.
+                    });
+            });
+
+            const refreshDiscussion = async () => {
+                const response = await fetch(window.location.href, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+                const html = await response.text();
+                const parsed = new DOMParser().parseFromString(html, 'text/html');
+                const nextDiscussion = parsed.querySelector('.experiment-comments');
+                const currentDiscussion = document.querySelector('.experiment-comments');
+
+                if (nextDiscussion && currentDiscussion) {
+                    currentDiscussion.replaceWith(nextDiscussion);
+                }
+            };
+
+            document.addEventListener('submit', async (event) => {
+                const form = event.target.closest('form[data-async-comment-form]');
+                if (!form) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                }
+
+                try {
+                    await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': token,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'text/html',
+                        },
+                        body: new FormData(form),
+                    });
+
+                    await refreshDiscussion();
+                } catch (error) {
+                    // Keep current page state if request fails.
+                } finally {
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                    }
+                }
+            });
+        })();
+    </script>
+@endauth
 @endsection

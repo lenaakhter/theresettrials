@@ -91,6 +91,7 @@ Route::middleware(['auth', 'not.banned', 'profile.complete'])->group(function ()
     Route::post('/comments/{comment}/like', [CommentController::class, 'toggleLike'])->name('comments.like');
     Route::post('/comments/{comment}/delete', [CommentController::class, 'delete'])->name('comments.delete');
     Route::post('/experiments/{experiment}/comments', [ExperimentController::class, 'comment'])->name('experiments.comment');
+    Route::post('/experiments/{experiment}/comments/{comment}/reply', [ExperimentController::class, 'reply'])->name('experiments.reply');
 });
 
 Route::get('/experiments/{experiment}', [ExperimentController::class, 'show'])->name('experiments.show');

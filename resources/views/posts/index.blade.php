@@ -18,14 +18,12 @@
             @if (($activeExperiments ?? collect())->isNotEmpty())
                 <div class="blog-featured-experiments__grid">
                     @foreach ($activeExperiments as $experiment)
-                        <article class="blog-featured-card">
+                        <a href="{{ route('experiments.show', $experiment) }}" class="blog-featured-card blog-featured-card--link">
                             <div class="blog-featured-card__label">Currently ongoing</div>
-                            <h3 class="blog-featured-card__title">
-                                <a href="{{ route('experiments.show', $experiment) }}">{{ $experiment->title }}</a>
-                            </h3>
+                            <h3 class="blog-featured-card__title">{{ $experiment->title }}</h3>
                             <p class="blog-featured-card__excerpt">{{ $experiment->description }}</p>
                             <p class="blog-featured-card__meta">Started {{ $experiment->start_date->format('M d, Y') }}</p>
-                        </article>
+                        </a>
                     @endforeach
                 </div>
             @else

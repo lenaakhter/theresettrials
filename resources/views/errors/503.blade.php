@@ -1,5 +1,5 @@
 @include('errors.partials.themed', [
-    'statusCode' => 419,
-    'title' => 'Session timed out',
+    'statusCode' => 503,
+    'title' => 'Service temporarily unavailable',
     'image' => 'images/waving.PNG',
 ])

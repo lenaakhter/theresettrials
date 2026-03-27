@@ -25,11 +25,13 @@
             @endif
 
             @auth
-                <form method="POST" action="{{ route('comments.store', $post) }}" class="comment-form">
-                    @csrf
-                    <textarea name="body" rows="4" required class="comment-form__textarea" placeholder="Share your thoughts..."></textarea>
-                    <button type="submit" class="comment-form__button">Post comment</button>
-                </form>
+                <div class="comment-composer">
+                    <form method="POST" action="{{ route('comments.store', $post) }}" class="comment-form" data-async-comment-form>
+                        @csrf
+                        <textarea name="body" rows="4" required class="comment-form__textarea" placeholder="Share your thoughts..."></textarea>
+                        <button type="submit" class="comment-form__button">Post comment</button>
+                    </form>
+                </div>
             @else
                 <p class="comments-section__login-hint">
                     Want to join the discussion? <a href="{{ route('login') }}">Log in</a> or <a href="{{ route('register') }}">sign up</a> to comment.
@@ -62,33 +64,6 @@ document.addEventListener('click', (event) => {
         return;
     }
 
-    // Handle delete trigger
-    const deleteTrigger = event.target.closest('[data-delete-trigger]');
-    if (deleteTrigger) {
-        const commentId = deleteTrigger.getAttribute('data-delete-trigger');
-        const modal = document.getElementById(`delete-modal-${commentId}`);
-        if (modal) modal.classList.remove('delete-modal--hidden');
-        return;
-    }
-
-    // Handle delete modal close (overlay click)
-    const deleteOverlay = event.target.closest('[data-delete-modal]');
-    if (deleteOverlay) {
-        const commentId = deleteOverlay.getAttribute('data-delete-modal');
-        const modal = document.getElementById(`delete-modal-${commentId}`);
-        if (modal) modal.classList.add('delete-modal--hidden');
-        return;
-    }
-
-    // Handle delete modal cancel button
-    const deleteCancel = event.target.closest('.delete-modal__cancel');
-    if (deleteCancel) {
-        const commentId = deleteCancel.getAttribute('data-delete-modal');
-        const modal = document.getElementById(`delete-modal-${commentId}`);
-        if (modal) modal.classList.add('delete-modal--hidden');
-        return;
-    }
-
     // Handle like button
     const likeBtn = event.target.closest('[data-like-btn]');
     if (!likeBtn) return;
@@ -117,6 +92,56 @@ document.addEventListener('click', (event) => {
         }
     })
     .catch(err => console.error('Error toggling like:', err));
+});
+
+const refreshComments = async () => {
+    const response = await fetch(window.location.href, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    });
+    const html = await response.text();
+    const parsed = new DOMParser().parseFromString(html, 'text/html');
+    const nextComments = parsed.querySelector('#comments');
+    const currentComments = document.querySelector('#comments');
+
+    if (nextComments && currentComments) {
+        currentComments.replaceWith(nextComments);
+    }
+};
+
+document.addEventListener('submit', async (event) => {
+    const form = event.target.closest('form[data-async-comment-form]');
+    if (!form) {
+        return;
+    }
+
+    event.preventDefault();
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+        submitButton.disabled = true;
+    }
+
+    try {
+        await fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'text/html',
+            },
+            body: new FormData(form),
+        });
+
+        await refreshComments();
+    } catch (error) {
+        console.error('Error submitting comment action:', error);
+    } finally {
+        if (submitButton) {
+            submitButton.disabled = false;
+        }
+    }
 });
 </script>
 

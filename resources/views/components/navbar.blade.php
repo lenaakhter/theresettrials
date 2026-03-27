@@ -59,17 +59,30 @@
                     @if(auth()->user()->is_admin)
                         <a href="{{ route('admin.experiments.index') }}" class="site-nav-bar__link">Admin</a>
                     @endif
-                <a href="{{ route('profile.edit') }}" class="site-nav-bar__link">Profile</a>
-                <form method="POST" action="{{ route('logout') }}" class="site-nav-logout-form">
-                    @csrf
-                    <button type="submit" class="c-button c-button--gooey">Log out
-                        <div class="c-button__blobs">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </button>
-                </form>
+                <div class="site-nav-account">
+                    <a href="{{ route('profile.edit') }}" class="site-nav-account__trigger" aria-label="Account menu">
+                        @if(auth()->user()->profile_photo)
+                            <img
+                                src="{{ asset(auth()->user()->profile_photo) }}"
+                                alt="{{ auth()->user()->display_name ?: auth()->user()->name }}"
+                                class="site-nav-account__avatar"
+                                style="object-position: {{ auth()->user()->avatar_focus_x ?? 50 }}% {{ auth()->user()->avatar_focus_y ?? 50 }}%;"
+                            >
+                        @else
+                            <span class="site-nav-account__avatar site-nav-account__avatar--placeholder">
+                                {{ strtoupper(substr(auth()->user()->display_name ?: auth()->user()->name, 0, 1)) }}
+                            </span>
+                        @endif
+                    </a>
+
+                    <div class="site-nav-account__menu" aria-label="Account options">
+                        <a href="{{ route('profile.edit') }}" class="site-nav-account__menu-link">Profile</a>
+                        <form method="POST" action="{{ route('logout') }}" class="site-nav-account__menu-form">
+                            @csrf
+                            <button type="submit" class="site-nav-account__menu-button">Log out</button>
+                        </form>
+                    </div>
+                </div>
             @else
                 <a href="{{ route('login') }}" class="c-button c-button--gooey">Log in
                     <div class="c-button__blobs">

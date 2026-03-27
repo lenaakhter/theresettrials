@@ -22,10 +22,15 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'display_name',
+        'username',
+        'username_changed_at',
         'email',
         'password',
         'is_admin',
+        'email_notifications_opt_in',
         'profile_photo',
+        'avatar_focus_x',
+        'avatar_focus_y',
     ];
 
     /**
@@ -49,6 +54,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'email_notifications_opt_in' => 'boolean',
+            'username_changed_at' => 'datetime',
+            'avatar_focus_x' => 'float',
+            'avatar_focus_y' => 'float',
         ];
     }
 
@@ -65,6 +74,11 @@ class User extends Authenticatable
     public function getCommentNameAttribute(): string
     {
         return $this->display_name ?: $this->name;
+    }
+
+    public function hasRequiredProfileInfo(): bool
+    {
+        return filled($this->display_name) && filled($this->username);
     }
 
     public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void

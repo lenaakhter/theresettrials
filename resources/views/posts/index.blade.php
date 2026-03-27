@@ -13,7 +13,6 @@
         <section class="blog-featured-experiments">
             <div class="blog-featured-experiments__header">
                 <h2 class="blog-featured-experiments__title">Currently Testing</h2>
-                <p class="blog-featured-experiments__subtitle">Currently ongoing</p>
             </div>
 
             @if (($activeExperiments ?? collect())->isNotEmpty())

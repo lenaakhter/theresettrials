@@ -17,8 +17,8 @@
         <form method="POST" action="{{ route('login.attempt') }}" class="admin-form">
             @csrf
 
-            <label for="email" class="admin-form__label">Email</label>
-            <input id="email" name="email" type="email" value="{{ old('email') }}" required autocomplete="email" class="admin-form__input">
+            <label for="login" class="admin-form__label">Email or username</label>
+            <input id="login" name="login" type="text" value="{{ old('login') }}" required autocomplete="username" class="admin-form__input" placeholder="you@example.com or your_username">
 
             <label for="password" class="admin-form__label">Password</label>
             <input id="password" name="password" type="password" required autocomplete="current-password" class="admin-form__input">

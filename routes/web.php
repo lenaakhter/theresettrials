@@ -75,6 +75,11 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [ReaderAuthController::class, 'logout'])->name('logout');
+    Route::get('/complete-profile', [ProfileController::class, 'showCompleteProfile'])->name('profile.complete.show');
+    Route::put('/complete-profile', [ProfileController::class, 'completeProfile'])->name('profile.complete.update');
+});
+
+Route::middleware(['auth', 'profile.complete'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/posts/{post:slug}/comments', [CommentController::class, 'store'])->name('comments.store');

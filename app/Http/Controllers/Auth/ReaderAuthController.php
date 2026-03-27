@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ReaderAuthController extends Controller
@@ -22,17 +23,28 @@ class ReaderAuthController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        $login = trim($credentials['login']);
+        $lookupField = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if ($lookupField === 'username') {
+            $login = strtolower($login);
+        }
+
+        if (! Auth::attempt([$lookupField => $login, 'password' => $credentials['password']], $request->boolean('remember'))) {
             return back()->withErrors([
-                'email' => 'These credentials do not match our records.',
-            ])->onlyInput('email');
+                'login' => 'These credentials do not match our records.',
+            ])->onlyInput('login');
         }
 
         $request->session()->regenerate();
+
+        if (! Auth::user()->hasRequiredProfileInfo()) {
+            return redirect()->route('profile.complete.show');
+        }
 
         return redirect()->intended(route('home'));
     }
@@ -46,17 +58,22 @@ class ReaderAuthController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'display_name' => ['nullable', 'string', 'max:255'],
+            'display_name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'min:3', 'max:30', 'regex:/^[A-Za-z0-9_]+$/', Rule::unique('users', 'username')],
+            'email_notifications_opt_in' => ['required', 'boolean'],
             'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'confirmed', 'min:8'],
         ]);
 
         $user = User::query()->create([
             'name' => $data['name'],
-            'display_name' => $data['display_name'] ?? null,
+            'display_name' => trim($data['display_name']),
+            'username' => strtolower(trim($data['username'])),
+            'username_changed_at' => now(),
             'email' => $data['email'],
             'password' => $data['password'],
             'is_admin' => false,
+            'email_notifications_opt_in' => (bool) $data['email_notifications_opt_in'],
         ]);
 
         Auth::login($user);

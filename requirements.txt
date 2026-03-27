@@ -9,6 +9,9 @@ Required software:
 - Node.js 20+ (npm included)
 - SQLite (default) or another DB supported by Laravel
 
+Windows zero-to-ready command (installs missing tools + project deps):
+- powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
+
 Quick setup (fresh clone):
 1) composer install
 2) copy .env.example .env

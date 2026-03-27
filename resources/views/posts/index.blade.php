@@ -55,7 +55,12 @@
                     <h2 class="post-card__title">
                         <a href="{{ route('posts.show', $post) }}">{{ $post->title }}</a>
                     </h2>
-                    <p class="post-card__excerpt">{{ $post->excerpt }}</p>
+                    @if ($post->category)
+                        <span class="post-card__category">{{ $post->category }}</span>
+                    @endif
+                    @if ($post->excerpt)
+                        <p class="post-card__excerpt">{{ $post->excerpt }}</p>
+                    @endif
                 </div>
             </article>
         @empty

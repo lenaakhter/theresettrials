@@ -50,15 +50,16 @@
                     <p class="admin-posts__subtitle" style="margin: -0.35rem 0 0.5rem;">Upload a new image to replace the current one (max 4MB).</p>
 
                     <label for="category" class="admin-form__label">Category (optional)</label>
-                    <input id="category" name="category" type="text" value="{{ old('category', $post->category) }}" placeholder="Supplements" class="admin-form__input">
+                    <select id="category" name="category" class="admin-form__input">
+                        <option value="">— None —</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat }}" {{ old('category', $post->category) === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                        @endforeach
+                    </select>
 
                     <label for="published_at" class="admin-form__label">Publish Date/Time (optional)</label>
                     <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', optional($post->published_at)->format('Y-m-d\TH:i')) }}" class="admin-form__input">
-
-                    <label class="admin-form__check-wrap">
-                        <input type="checkbox" name="publish_now" value="1" {{ old('publish_now') ? 'checked' : '' }}>
-                        <span>Publish now</span>
-                    </label>
+                    <p class="admin-posts__subtitle" style="margin: -0.35rem 0 0.5rem;">Leave blank to publish immediately.</p>
 
                     <button type="submit" class="admin-form__button">Save Changes</button>
                 </form>

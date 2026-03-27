@@ -16,6 +16,7 @@
             <li><a href="{{ route('admin.experiments.index') }}">Experiments</a></li>
             <li><a href="{{ route('admin.resources.index') }}">Resources</a></li>
             <li><a href="{{ route('admin.subscribers.index') }}">Subscribers</a></li>
+            <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
             <li><a href="{{ route('admin.admins.create') }}">New Admin</a></li>
             <li><a href="/" class="admin-toggle">← Back to Site</a></li>
             <li>

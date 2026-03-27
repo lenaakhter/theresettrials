@@ -590,6 +590,13 @@ base colours
     font-family: 'Playfair Display', serif;
 }
 
+.post-single__excerpt {
+    margin: 0.75rem 0 0;
+    color: #8C7B7F;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
 .blog-index__subtitle {
     margin: 0.75rem 0 0;
     color: #8C7B7F;

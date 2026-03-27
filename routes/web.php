@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\AdminUserManagementController;
+use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\Admin\PostManagementController;
 use App\Http\Controllers\Admin\SubscriberManagementController;
 use App\Http\Controllers\Admin\ExperimentController as AdminExperimentController;
@@ -33,7 +34,16 @@ Route::get('/', function () {
         ->take(2)
         ->get();
 
-    return view('welcome', compact('latestPosts', 'experiments'));
+    $knownCategories = \App\Models\PostCategory::pluck('name')->all();
+
+    $activeCategories = Post::query()
+        ->published()
+        ->whereNotNull('category')
+        ->whereIn('category', $knownCategories)
+        ->distinct()
+        ->pluck('category');
+
+    return view('welcome', compact('latestPosts', 'experiments', 'activeCategories'));
 })->name('home');
 
 Route::get('/blogs', [PostController::class, 'index'])->name('blogs.index');
@@ -157,6 +167,9 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::post('/posts/{post}/resources', [AdminResourceController::class, 'storeForPost'])->name('posts.resources.store');
         Route::post('/experiments/{experiment}/resources', [AdminResourceController::class, 'storeForExperiment'])->name('experiments.resources.store');
         Route::delete('/resources/{resource}/inline', [AdminResourceController::class, 'destroyInline'])->name('resources.destroy-inline');
+        Route::get('/categories', [PostCategoryController::class, 'index'])->name('categories.index');
+        Route::post('/categories', [PostCategoryController::class, 'store'])->name('categories.store');
+        Route::delete('/categories/{category}', [PostCategoryController::class, 'destroy'])->name('categories.destroy');
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
     });
 });

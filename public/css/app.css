@@ -1348,12 +1348,42 @@ base colours
     font-size: 0.85rem;
 }
 
+.post-card__category {
+    display: inline-block;
+    margin: 0.3rem 0 0;
+    padding: 0.15rem 0.55rem;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
 .post-single__image {
     width: 100%;
     max-height: 460px;
     object-fit: cover;
     border-radius: 16px;
     margin-top: 1rem;
+}
+
+.post-single__disclaimer {
+    margin: 1rem 0 0;
+    padding: 0.6rem 1rem;
+    background: #f7f0f2;
+    border-left: 3px solid #c56a7f;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.85rem;
+    color: #7a4050;
+}
+
+.post-single__disclaimer a {
+    color: #c56a7f;
+    font-weight: 600;
+    text-decoration: underline;
 }
 
 .post-single__content {

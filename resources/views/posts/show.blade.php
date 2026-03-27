@@ -6,6 +6,10 @@
         <p class="post-single__meta">{{ optional($post->published_at)->format('M d, Y') }}</p>
         <h1 class="post-single__title">{{ $post->title }}</h1>
 
+        @if ($post->excerpt)
+            <p class="post-single__excerpt">{{ $post->excerpt }}</p>
+        @endif
+
         @if ($post->cover_image_url)
             <img src="{{ $post->cover_image_url }}" alt="{{ $post->title }}" class="post-single__image">
         @endif
@@ -26,6 +30,10 @@
                 </div>
             </div>
         @endif
+
+        <p class="post-single__disclaimer">
+            Please read the <a href="{{ route('disclaimer') }}">disclaimer</a> before continuing.
+        </p>
 
         <div class="post-single__content">
             {!! nl2br(e($post->content)) !!}

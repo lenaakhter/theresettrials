@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\NewsletterSubscriber;
 use App\Models\Post;
+use App\Models\PostCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -14,8 +15,9 @@ class PostManagementController extends Controller
     {
         $recentPosts = Post::query()->latest('created_at')->take(6)->get();
         $subscriberCount = NewsletterSubscriber::query()->count();
+        $categories = PostCategory::orderBy('name')->pluck('name');
 
-        return view('admin.posts.create', compact('recentPosts', 'subscriberCount'));
+        return view('admin.posts.create', compact('recentPosts', 'subscriberCount', 'categories'));
     }
 
     public function store(Request $request)
@@ -43,8 +45,9 @@ class PostManagementController extends Controller
         $recentPosts  = Post::query()->latest('created_at')->take(6)->get();
         $resources    = $post->resources()->get();
         $allResources = \App\Models\Resource::orderBy('name')->get(['id', 'name']);
+        $categories   = PostCategory::orderBy('name')->pluck('name');
 
-        return view('admin.posts.edit', compact('post', 'recentPosts', 'resources', 'allResources'));
+        return view('admin.posts.edit', compact('post', 'recentPosts', 'resources', 'allResources', 'categories'));
     }
 
     public function update(Request $request, Post $post)
@@ -80,7 +83,6 @@ class PostManagementController extends Controller
             'cover_image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:4096'],
             'category' => ['nullable', 'string', 'max:100'],
             'published_at' => ['nullable', 'date'],
-            'publish_now' => ['nullable', 'boolean'],
         ];
     }
 
@@ -112,11 +114,7 @@ class PostManagementController extends Controller
 
     private function resolvePublishedAt(Request $request, array $data)
     {
-        if ($request->boolean('publish_now') && empty($data['published_at'])) {
-            return now();
-        }
-
-        return $data['published_at'] ?? null;
+        return $data['published_at'] ?? now();
     }
 
     private function generateUniqueSlug(string $title): string

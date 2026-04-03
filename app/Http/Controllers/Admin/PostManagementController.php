@@ -100,7 +100,7 @@ class PostManagementController extends Controller
         }
 
         $file = $request->file('cover_image_upload');
-        $directory = public_path('images/uploads/posts');
+        $directory = $this->postUploadDirectory();
 
         if (! is_dir($directory)) {
             mkdir($directory, 0755, true);
@@ -110,13 +110,40 @@ class PostManagementController extends Controller
         $file->move($directory, $filename);
 
         if ($currentPath && str_starts_with($currentPath, 'images/uploads/posts/')) {
-            $oldPath = public_path($currentPath);
-            if (is_file($oldPath)) {
-                @unlink($oldPath);
-            }
+            $this->deleteCoverImageFromKnownPublicRoots($currentPath);
         }
 
         return 'images/uploads/posts/'.$filename;
+    }
+
+    private function postUploadDirectory(): string
+    {
+        $siteGroundPublicHtml = base_path('public_html');
+
+        if (is_dir($siteGroundPublicHtml)) {
+            return $siteGroundPublicHtml.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'posts';
+        }
+
+        return public_path('images/uploads/posts');
+    }
+
+    private function deleteCoverImageFromKnownPublicRoots(string $relativePath): void
+    {
+        $trimmedPath = ltrim($relativePath, '/\\');
+        $candidatePaths = [
+            public_path($trimmedPath),
+        ];
+
+        $siteGroundPublicHtml = base_path('public_html');
+        if (is_dir($siteGroundPublicHtml)) {
+            $candidatePaths[] = $siteGroundPublicHtml.DIRECTORY_SEPARATOR.str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $trimmedPath);
+        }
+
+        foreach (array_unique($candidatePaths) as $path) {
+            if (is_file($path)) {
+                @unlink($path);
+            }
+        }
     }
 
     private function resolvePublishedAt(Request $request, array $data)

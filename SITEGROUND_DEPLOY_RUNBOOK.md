@@ -34,12 +34,18 @@ ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=6 -i "$env:USERPROFILE\.ssh
 cd ~/www/theresettrials.com/laravel-app
 tar -xzf ~/www/theresettrials.com/deploy.tar.gz
 rm ~/www/theresettrials.com/deploy.tar.gz
+
+# Safety pre-checks (verify production is using the expected DB/session setup)
+php artisan tinker --execute="echo 'DB: '.config('database.default').PHP_EOL; echo 'SESSION: '.config('session.driver').PHP_EOL;"
+
 composer install --no-dev --optimize-autoloader
 php artisan migrate --force
-php artisan optimize:clear
+
+# Do NOT run optimize:clear in normal deploys; it can flush caches/sessions depending on driver.
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+
 npm ci
 npm run build
 rsync -av --delete public/build/ ~/www/theresettrials.com/public_html/build/
@@ -59,8 +65,12 @@ exit
 3. If anything looks stale, run this on the server and refresh again:
 
 ```bash
-php artisan optimize:clear
+php artisan view:clear
+php artisan route:clear
+php artisan config:clear
 ```
+
+If `SESSION_DRIVER` uses `redis` or `memcached`, avoid `cache:clear` during live traffic because it can log users out.
 
 ## Known gotchas
 
@@ -68,3 +78,8 @@ php artisan optimize:clear
 - Do not use this broken pattern: `$env:USERPROFILE.ssh\...`
 - SiteGround app path used in this project: `~/www/theresettrials.com/laravel-app`
 - Live public web root used in this project: `~/www/theresettrials.com/public_html`
+- If DB ever looks "reset", immediately check runtime config:
+
+```bash
+php artisan tinker --execute="echo 'DB: '.config('database.default').PHP_EOL; echo 'DB_DATABASE: '.config('database.connections.'.config('database.default').'.database').PHP_EOL;"
+```

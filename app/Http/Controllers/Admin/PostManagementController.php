@@ -29,6 +29,7 @@ class PostManagementController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate($this->rules());
+        $normalizedContent = $this->normalizeContentPayload($data['content']);
 
         $slug = $this->generateUniqueSlug($data['title']);
         $coverImage = $this->saveCoverImageUpload($request);
@@ -37,7 +38,7 @@ class PostManagementController extends Controller
             'title' => $data['title'],
             'slug' => $slug,
             'excerpt' => $data['excerpt'] ?? null,
-            'content' => $data['content'],
+            'content' => $normalizedContent,
             'cover_image' => $coverImage,
             'category' => $data['category'] ?? null,
             'published_at' => $this->resolvePublishedAt($request, $data),
@@ -58,12 +59,13 @@ class PostManagementController extends Controller
     public function update(Request $request, Post $post)
     {
         $data = $request->validate($this->rules());
+        $normalizedContent = $this->normalizeContentPayload($data['content']);
         $coverImage = $this->saveCoverImageUpload($request, $post->cover_image);
 
         $post->update([
             'title' => $data['title'],
             'excerpt' => $data['excerpt'] ?? null,
-            'content' => $data['content'],
+            'content' => $normalizedContent,
             'cover_image' => $coverImage,
             'category' => $data['category'] ?? null,
             'published_at' => $this->resolvePublishedAt($request, $data),
@@ -120,6 +122,75 @@ class PostManagementController extends Controller
     private function resolvePublishedAt(Request $request, array $data)
     {
         return $data['published_at'] ?? now();
+    }
+
+    private function normalizeContentPayload(string $raw): string
+    {
+        $decoded = json_decode($raw, true);
+
+        if (! is_array($decoded) || ! isset($decoded['blocks']) || ! is_array($decoded['blocks'])) {
+            $text = trim($raw);
+
+            return json_encode([
+                'version' => 1,
+                'blocks' => $text === ''
+                    ? []
+                    : [[
+                        'type' => 'paragraph',
+                        'text' => $text,
+                    ]],
+            ], JSON_UNESCAPED_SLASHES);
+        }
+
+        $normalizedBlocks = [];
+
+        foreach ($decoded['blocks'] as $block) {
+            if (! is_array($block) || ! isset($block['type'])) {
+                continue;
+            }
+
+            $type = (string) $block['type'];
+
+            if ($type === 'paragraph') {
+                $text = trim((string) ($block['text'] ?? ''));
+                if ($text !== '') {
+                    $normalizedBlocks[] = ['type' => 'paragraph', 'text' => $text];
+                }
+                continue;
+            }
+
+            if ($type === 'heading') {
+                $text = trim((string) ($block['text'] ?? ''));
+                if ($text === '') {
+                    continue;
+                }
+                $level = (int) ($block['level'] ?? 2);
+                if (! in_array($level, [2, 3, 4], true)) {
+                    $level = 2;
+                }
+                $normalizedBlocks[] = [
+                    'type' => 'heading',
+                    'text' => $text,
+                    'level' => $level,
+                ];
+                continue;
+            }
+
+            if ($type === 'tiktok') {
+                $url = trim((string) ($block['url'] ?? ''));
+                if ($url !== '') {
+                    $normalizedBlocks[] = [
+                        'type' => 'tiktok',
+                        'url' => $url,
+                    ];
+                }
+            }
+        }
+
+        return json_encode([
+            'version' => 1,
+            'blocks' => $normalizedBlocks,
+        ], JSON_UNESCAPED_SLASHES);
     }
 
     private function generateUniqueSlug(string $title): string

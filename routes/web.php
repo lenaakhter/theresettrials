@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\AdminUserManagementController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\Admin\PostManagementController;
+use App\Http\Controllers\Admin\SitePageController;
 use App\Http\Controllers\Admin\SubscriberManagementController;
 use App\Http\Controllers\Admin\ExperimentController as AdminExperimentController;
 use App\Http\Controllers\Admin\ResourceController as AdminResourceController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\BanAppealController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Post;
+use App\Models\SitePage;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
@@ -52,7 +54,15 @@ Route::redirect('/shop', '/blogs');
 Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 
 Route::get('/about', function () {
-    return view('about');
+    $aboutPage = SitePage::query()->firstOrCreate(
+        ['slug' => 'about'],
+        [
+            'title' => 'About',
+            'content' => 'Keeping this page simple for now. I will share my full journey here soon.',
+        ]
+    );
+
+    return view('about', compact('aboutPage'));
 })->name('about');
 
 Route::get('/disclaimer', function () {
@@ -171,6 +181,8 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::get('/categories', [PostCategoryController::class, 'index'])->name('categories.index');
         Route::post('/categories', [PostCategoryController::class, 'store'])->name('categories.store');
         Route::delete('/categories/{category}', [PostCategoryController::class, 'destroy'])->name('categories.destroy');
+        Route::get('/pages/about', [SitePageController::class, 'editAbout'])->name('pages.about.edit');
+        Route::put('/pages/about', [SitePageController::class, 'updateAbout'])->name('pages.about.update');
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
     });
 });

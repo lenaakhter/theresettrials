@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Experiment;
 use App\Models\ExperimentEntry;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ExperimentController extends Controller
@@ -16,17 +17,17 @@ class ExperimentController extends Controller
 
     public function storeEntry(Request $request, Experiment $experiment)
     {
-        $request->validate([
-            'entry_date' => 'required|datetime',
+        $validated = $request->validate([
+            'entry_date' => 'required|date_format:Y-m-d\TH:i',
             'type' => 'required|in:observation,result,note,update',
             'content' => 'required|string|max:5000',
         ]);
 
         ExperimentEntry::create([
             'experiment_id' => $experiment->id,
-            'entry_date' => $request->entry_date,
-            'type' => $request->type,
-            'content' => $request->content,
+            'entry_date' => Carbon::createFromFormat('Y-m-d\TH:i', $validated['entry_date']),
+            'type' => $validated['type'],
+            'content' => $validated['content'],
         ]);
 
         return redirect()->route('experiments.show', $experiment)->with('success', 'Entry added successfully!');

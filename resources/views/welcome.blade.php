@@ -78,25 +78,45 @@
     </div>
 
     <div class="exploring-map__canvas">
+        @php
+            $mapCategories = $activeCategories->values();
+            $categoryStyles = [
+                'exploring-map__node--supplements',
+                'exploring-map__node--lifestyle',
+                'exploring-map__node--nutrition',
+                'exploring-map__node--exercise',
+                'exploring-map__node--hormones',
+                'exploring-map__node--habits',
+            ];
+
+            $totalCategories = max($mapCategories->count(), 1);
+            $startAngle = -M_PI / 2;
+            $step = (2 * M_PI) / $totalCategories;
+            $radiusX = 335;
+            $radiusY = 220;
+        @endphp
+
         <svg viewBox="0 0 1000 620" class="exploring-map__svg" role="img" aria-label="Mind map of topics being explored">
-            @if($activeCategories->contains('Supplements'))
-            <path class="exploring-map__line" d="M500 310 C365 280, 285 220, 210 150" />
-            @endif
-            @if($activeCategories->contains('Lifestyle'))
-            <path class="exploring-map__line" d="M500 310 C360 315, 275 315, 180 305" />
-            @endif
-            @if($activeCategories->contains('Nutrition'))
-            <path class="exploring-map__line" d="M500 310 C365 360, 285 440, 210 510" />
-            @endif
-            @if($activeCategories->contains('Exercise'))
-            <path class="exploring-map__line" d="M500 310 C635 275, 720 215, 810 150" />
-            @endif
-            @if($activeCategories->contains('Hormones'))
-            <path class="exploring-map__line" d="M500 310 C640 315, 730 320, 820 310" />
-            @endif
-            @if($activeCategories->contains('Low-Maintenance Habits'))
-            <path class="exploring-map__line" d="M500 310 C635 365, 720 445, 810 510" />
-            @endif
+            @foreach($mapCategories as $index => $categoryName)
+                @php
+                    $angle = $startAngle + ($index * $step);
+                    $centerX = 500 + ($radiusX * cos($angle));
+                    $centerY = 310 + ($radiusY * sin($angle));
+                    $nodeWidth = min(max(182, 124 + (strlen($categoryName) * 5)), 260);
+                    $nodeHeight = 100;
+                    $nodeX = $centerX - ($nodeWidth / 2);
+                    $nodeY = $centerY - ($nodeHeight / 2);
+
+                    $control1X = 500 + (($centerX - 500) * 0.42);
+                    $control1Y = 310 + (($centerY - 310) * 0.22);
+                    $control2X = 500 + (($centerX - 500) * 0.76);
+                    $control2Y = 310 + (($centerY - 310) * 0.84);
+                @endphp
+                <path
+                    class="exploring-map__line"
+                    d="M500 310 C{{ round($control1X, 2) }} {{ round($control1Y, 2) }}, {{ round($control2X, 2) }} {{ round($control2Y, 2) }}, {{ round($centerX, 2) }} {{ round($centerY, 2) }}"
+                />
+            @endforeach
 
             <foreignObject x="376" y="212" width="248" height="196">
                 <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node exploring-map__node--center">
@@ -104,77 +124,35 @@
                 </div>
             </foreignObject>
 
-            @if($activeCategories->contains('Supplements'))
-            <foreignObject x="118" y="86" width="210" height="110">
-                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--left">
-                    <a href="{{ route('posts.index', ['category' => 'Supplements']) }}" class="exploring-map__node exploring-map__node--supplements">Supplements</a>
-                </div>
-            </foreignObject>
-            @endif
-
-            @if($activeCategories->contains('Lifestyle'))
-            <foreignObject x="82" y="255" width="210" height="110">
-                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--left">
-                    <a href="{{ route('posts.index', ['category' => 'Lifestyle']) }}" class="exploring-map__node exploring-map__node--lifestyle">Lifestyle</a>
-                </div>
-            </foreignObject>
-            @endif
-
-            @if($activeCategories->contains('Nutrition'))
-            <foreignObject x="132" y="446" width="210" height="110">
-                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--left">
-                    <a href="{{ route('posts.index', ['category' => 'Nutrition']) }}" class="exploring-map__node exploring-map__node--nutrition">Nutrition</a>
-                </div>
-            </foreignObject>
-            @endif
-
-            @if($activeCategories->contains('Exercise'))
-            <foreignObject x="688" y="86" width="200" height="110">
-                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--right">
-                    <a href="{{ route('posts.index', ['category' => 'Exercise']) }}" class="exploring-map__node exploring-map__node--exercise">Exercise</a>
-                </div>
-            </foreignObject>
-            @endif
-
-            @if($activeCategories->contains('Hormones'))
-            <foreignObject x="688" y="255" width="210" height="110">
-                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--right">
-                    <a href="{{ route('posts.index', ['category' => 'Hormones']) }}" class="exploring-map__node exploring-map__node--hormones">Hormones</a>
-                </div>
-            </foreignObject>
-            @endif
-
-            @if($activeCategories->contains('Low-Maintenance Habits'))
-            <foreignObject x="666" y="434" width="248" height="132">
-                <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap exploring-map__node-wrap--right">
-                    <a href="{{ route('posts.index', ['category' => 'Low-Maintenance Habits']) }}" class="exploring-map__node exploring-map__node--habits">Low-Maintenance Habits</a>
-                </div>
-            </foreignObject>
-            @endif
+            @foreach($mapCategories as $index => $categoryName)
+                @php
+                    $angle = $startAngle + ($index * $step);
+                    $centerX = 500 + ($radiusX * cos($angle));
+                    $centerY = 310 + ($radiusY * sin($angle));
+                    $nodeWidth = min(max(182, 124 + (strlen($categoryName) * 5)), 260);
+                    $nodeHeight = 100;
+                    $nodeX = $centerX - ($nodeWidth / 2);
+                    $nodeY = $centerY - ($nodeHeight / 2);
+                    $nodeClass = $categoryStyles[$index % count($categoryStyles)];
+                @endphp
+                <foreignObject x="{{ round($nodeX, 2) }}" y="{{ round($nodeY, 2) }}" width="{{ round($nodeWidth, 2) }}" height="{{ $nodeHeight }}">
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="exploring-map__node-wrap" style="justify-content: center;">
+                        <a href="{{ route('posts.index', ['category' => $categoryName]) }}" class="exploring-map__node {{ $nodeClass }}">{{ $categoryName }}</a>
+                    </div>
+                </foreignObject>
+            @endforeach
         </svg>
 
         <div class="exploring-map-mobile" aria-label="Mobile list of topics being explored">
             <div class="exploring-map-mobile__center">What I'm Exploring</div>
 
             <div class="exploring-map-mobile__items">
-                @if($activeCategories->contains('Supplements'))
-                <a href="{{ route('posts.index', ['category' => 'Supplements']) }}" class="exploring-map__node exploring-map__node--supplements">Supplements</a>
-                @endif
-                @if($activeCategories->contains('Lifestyle'))
-                <a href="{{ route('posts.index', ['category' => 'Lifestyle']) }}" class="exploring-map__node exploring-map__node--lifestyle">Lifestyle</a>
-                @endif
-                @if($activeCategories->contains('Nutrition'))
-                <a href="{{ route('posts.index', ['category' => 'Nutrition']) }}" class="exploring-map__node exploring-map__node--nutrition">Nutrition</a>
-                @endif
-                @if($activeCategories->contains('Exercise'))
-                <a href="{{ route('posts.index', ['category' => 'Exercise']) }}" class="exploring-map__node exploring-map__node--exercise">Exercise</a>
-                @endif
-                @if($activeCategories->contains('Hormones'))
-                <a href="{{ route('posts.index', ['category' => 'Hormones']) }}" class="exploring-map__node exploring-map__node--hormones">Hormones</a>
-                @endif
-                @if($activeCategories->contains('Low-Maintenance Habits'))
-                <a href="{{ route('posts.index', ['category' => 'Low-Maintenance Habits']) }}" class="exploring-map__node exploring-map__node--habits">Low-Maintenance Habits</a>
-                @endif
+                @foreach($mapCategories as $index => $categoryName)
+                    @php
+                        $nodeClass = $categoryStyles[$index % count($categoryStyles)];
+                    @endphp
+                    <a href="{{ route('posts.index', ['category' => $categoryName]) }}" class="exploring-map__node {{ $nodeClass }}">{{ $categoryName }}</a>
+                @endforeach
             </div>
         </div>
     </div>

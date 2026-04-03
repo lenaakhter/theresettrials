@@ -35,8 +35,48 @@
             Please read the <a href="{{ route('disclaimer') }}">disclaimer</a> before continuing.
         </p>
 
+        @php
+            $contentBlocks = $post->contentBlocksWithAnchors();
+            $tocItems = collect($contentBlocks)->where('type', 'heading')->values();
+        @endphp
+
+        @if ($tocItems->isNotEmpty())
+            <nav class="post-single__toc" aria-label="Table of contents">
+                <p class="post-single__toc-title">Contents</p>
+                <ul class="post-single__toc-list">
+                    @foreach ($tocItems as $item)
+                        <li class="post-single__toc-item post-single__toc-item--level-{{ $item['level'] ?? 2 }}">
+                            <a href="#{{ $item['anchor'] }}">{{ $item['text'] }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </nav>
+        @endif
+
         <div class="post-single__content">
-            {!! nl2br(e($post->content)) !!}
+            @foreach ($contentBlocks as $block)
+                @if (($block['type'] ?? null) === 'heading')
+                    @if (($block['level'] ?? 2) === 3)
+                        <h3 id="{{ $block['anchor'] }}">{{ $block['text'] }}</h3>
+                    @elseif (($block['level'] ?? 2) === 4)
+                        <h4 id="{{ $block['anchor'] }}">{{ $block['text'] }}</h4>
+                    @else
+                        <h2 id="{{ $block['anchor'] }}">{{ $block['text'] }}</h2>
+                    @endif
+                @elseif (($block['type'] ?? null) === 'tiktok')
+                    <div class="post-single__embed-wrap">
+                        <iframe
+                            src="https://www.tiktok.com/embed/v2/{{ $block['video_id'] }}"
+                            class="post-single__tiktok"
+                            title="TikTok video"
+                            allowfullscreen
+                            loading="lazy"
+                        ></iframe>
+                    </div>
+                @elseif (!empty($block['text']))
+                    <p>{!! nl2br(e($block['text'])) !!}</p>
+                @endif
+            @endforeach
         </div>
 
         <section class="comments-section" id="comments">
@@ -189,11 +229,7 @@ document.addEventListener('keydown', (event) => {
 
     <div class="latest-posts__track">
         @foreach ($latestPosts as $latestPost)
-            @php
-                $i = $loop->index;
-                $tile = match($i) { 0 => 'featured', 1 => 'tall', 4 => 'wide', default => '' };
-            @endphp
-            <article class="latest-post{{ $tile ? ' latest-post--'.$tile : '' }}">
+            <article class="latest-post">
                 <a href="{{ route('posts.show', $latestPost) }}" class="latest-post__image-wrap">
                     @if ($latestPost->cover_image_url)
                         <img src="{{ $latestPost->cover_image_url }}" alt="{{ $latestPost->title }}" class="latest-post__image">

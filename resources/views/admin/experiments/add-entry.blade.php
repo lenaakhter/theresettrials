@@ -17,7 +17,7 @@
                 <input 
                     type="datetime-local" 
                     name="entry_date" 
-                    value="{{ now()->format('Y-m-d\TH:i') }}"
+                    value="{{ old('entry_date', now()->format('Y-m-d\TH:i')) }}"
                     style="width: 100%; padding: 0.65rem; border: 1px solid #d5c7cc; border-radius: 8px; font-family: 'Quicksand', sans-serif;"
                     required
                 >
@@ -33,10 +33,10 @@
                     style="width: 100%; padding: 0.65rem; border: 1px solid #d5c7cc; border-radius: 8px; font-family: 'Quicksand', sans-serif;"
                     required
                 >
-                    <option value="observation">Observation</option>
-                    <option value="result">Result</option>
-                    <option value="note">Note</option>
-                    <option value="update" selected>Update</option>
+                    <option value="observation" @selected(old('type') === 'observation')>Observation</option>
+                    <option value="result" @selected(old('type') === 'result')>Result</option>
+                    <option value="note" @selected(old('type') === 'note')>Note</option>
+                    <option value="update" @selected(old('type', 'update') === 'update')>Update</option>
                 </select>
                 @error('type')
                     <span style="color: #d32f2f; font-size: 0.85rem;">{{ $message }}</span>
@@ -50,7 +50,7 @@
                     placeholder="Write your entry..." 
                     style="width: 100%; min-height: 200px; padding: 0.75rem; border: 1px solid #d5c7cc; border-radius: 8px; font-family: 'Quicksand', sans-serif; font-size: 0.95rem; resize: vertical;"
                     required
-                ></textarea>
+                >{{ old('content') }}</textarea>
                 @error('content')
                     <span style="color: #d32f2f; font-size: 0.85rem;">{{ $message }}</span>
                 @enderror

@@ -118,9 +118,9 @@ class PostManagementController extends Controller
 
     private function postUploadDirectory(): string
     {
-        $siteGroundPublicHtml = base_path('public_html');
+        $siteGroundPublicHtml = $this->siteGroundPublicHtmlPath();
 
-        if (is_dir($siteGroundPublicHtml)) {
+        if ($siteGroundPublicHtml !== null) {
             return $siteGroundPublicHtml.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'posts';
         }
 
@@ -134,9 +134,14 @@ class PostManagementController extends Controller
             public_path($trimmedPath),
         ];
 
-        $siteGroundPublicHtml = base_path('public_html');
-        if (is_dir($siteGroundPublicHtml)) {
+        $siteGroundPublicHtml = $this->siteGroundPublicHtmlPath();
+        if ($siteGroundPublicHtml !== null) {
             $candidatePaths[] = $siteGroundPublicHtml.DIRECTORY_SEPARATOR.str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $trimmedPath);
+        }
+
+        $legacyNestedPublicHtml = base_path('public_html');
+        if (is_dir($legacyNestedPublicHtml)) {
+            $candidatePaths[] = $legacyNestedPublicHtml.DIRECTORY_SEPARATOR.str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $trimmedPath);
         }
 
         foreach (array_unique($candidatePaths) as $path) {
@@ -144,6 +149,22 @@ class PostManagementController extends Controller
                 @unlink($path);
             }
         }
+    }
+
+    private function siteGroundPublicHtmlPath(): ?string
+    {
+        $candidatePaths = [
+            dirname(base_path()).DIRECTORY_SEPARATOR.'public_html',
+            base_path('public_html'),
+        ];
+
+        foreach ($candidatePaths as $candidatePath) {
+            if (is_dir($candidatePath)) {
+                return $candidatePath;
+            }
+        }
+
+        return null;
     }
 
     private function resolvePublishedAt(Request $request, array $data)

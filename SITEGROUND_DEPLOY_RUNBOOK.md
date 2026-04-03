@@ -22,6 +22,14 @@ git archive --format=tar.gz -o deploy.tar.gz HEAD
 scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 .\deploy.tar.gz u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/deploy.tar.gz
 ```
 
+If you created or changed post cover images locally, upload those separately too.
+`git archive` does not include untracked uploaded files:
+
+```powershell
+ssh -i "$env:USERPROFILE\.ssh\lena_new" -p 18765 u3012-emeadboaxb0v@ssh.theresettrials.com "mkdir -p ~/www/theresettrials.com/public_html/images/uploads"
+scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\posts u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/
+```
+
 ## 2) Connect to SiteGround
 
 ```powershell
@@ -41,6 +49,7 @@ php artisan tinker --execute="echo 'DB: '.config('database.default').PHP_EOL; ec
 # Stop immediately if DB is not mysql/mariadb (prevents writing to wrong DB like sqlite)
 php artisan tinker --execute="if (!in_array(config('database.default'), ['mysql','mariadb'], true)) { echo 'ABORT: unexpected DB connection'.PHP_EOL; exit(1);}"
 
+
 composer install --no-dev --optimize-autoloader
 php artisan migrate --force
 
@@ -53,6 +62,7 @@ npm ci
 npm run build
 rsync -av --delete public/build/ ~/www/theresettrials.com/public_html/build/
 rsync -av public/css/ ~/www/theresettrials.com/public_html/css/
+rsync -av --exclude 'uploads/' public/images/ ~/www/theresettrials.com/public_html/images/
 ```
 
 ## 4) Exit
@@ -74,6 +84,14 @@ php artisan config:clear
 ```
 
 If `SESSION_DRIVER` uses `redis` or `memcached`, avoid `cache:clear` during live traffic because it can log users out.
+
+If older post cover images are still broken from the previous split-path bug, run this one-time repair command on the server:
+
+```bash
+mkdir -p ~/www/theresettrials.com/public_html/images/uploads/posts
+cp -n ~/www/theresettrials.com/laravel-app/public_html/images/uploads/posts/* ~/www/theresettrials.com/public_html/images/uploads/posts/ 2>/dev/null || true
+cp -n ~/www/theresettrials.com/laravel-app/public/images/uploads/posts/* ~/www/theresettrials.com/public_html/images/uploads/posts/ 2>/dev/null || true
+```
 
 ## Known gotchas
 

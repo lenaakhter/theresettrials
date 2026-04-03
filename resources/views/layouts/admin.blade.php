@@ -10,21 +10,36 @@
 </head>
 <body>
     <nav class="admin-navbar">
-        <h2>Admin Lair</h2>
+        <a href="{{ route('admin.experiments.index') }}" class="admin-navbar__brand">Admin Lair</a>
         <ul class="admin-nav-items">
-            <li><a href="{{ route('admin.posts.index') }}">Posts</a></li>
-            <li><a href="{{ route('admin.posts.create') }}">New Post</a></li>
-            <li><a href="{{ route('admin.experiments.index') }}">Experiments</a></li>
-            <li><a href="{{ route('admin.resources.index') }}">Resources</a></li>
-            <li><a href="{{ route('admin.pages.about.edit') }}">Edit About</a></li>
+            <li class="admin-nav-items__group">
+                <details class="admin-nav-dropdown">
+                    <summary>Content</summary>
+                    <div class="admin-nav-dropdown__menu">
+                        <a href="{{ route('admin.posts.index') }}">Posts</a>
+                        <a href="{{ route('admin.posts.create') }}">New Post</a>
+                        <a href="{{ route('admin.experiments.index') }}">Experiments</a>
+                        <a href="{{ route('admin.resources.index') }}">Resources</a>
+                        <a href="{{ route('admin.categories.index') }}">Categories</a>
+                    </div>
+                </details>
+            </li>
+            <li class="admin-nav-items__group">
+                <details class="admin-nav-dropdown">
+                    <summary>Pages</summary>
+                    <div class="admin-nav-dropdown__menu">
+                        <a href="{{ route('admin.pages.about.edit') }}">Edit About</a>
+                        <a href="{{ route('admin.pages.disclaimer.edit') }}">Edit Disclaimer</a>
+                    </div>
+                </details>
+            </li>
             <li><a href="{{ route('admin.subscribers.index') }}">Subscribers</a></li>
-            <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
-            <li><a href="{{ route('admin.admins.create') }}">New Admin</a></li>
-            <li><a href="/" class="admin-toggle">← Back to Site</a></li>
+            <li><a href="{{ route('admin.admins.create') }}">Admins</a></li>
+            <li><a href="/" class="admin-toggle">Back to Site</a></li>
             <li>
                 <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
                     @csrf
-                    <button type="submit">Logout</button>
+                    <button type="submit" class="admin-nav-items__logout">Logout</button>
                 </form>
             </li>
         </ul>

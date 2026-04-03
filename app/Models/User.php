@@ -32,9 +32,6 @@ class User extends Authenticatable
         'ban_duration_hours',
         'ban_started_at',
         'ban_reason',
-        'profile_photo',
-        'avatar_focus_x',
-        'avatar_focus_y',
     ];
 
     /**
@@ -62,8 +59,6 @@ class User extends Authenticatable
             'banned_until' => 'datetime',
             'ban_started_at' => 'datetime',
             'username_changed_at' => 'datetime',
-            'avatar_focus_x' => 'float',
-            'avatar_focus_y' => 'float',
         ];
     }
 

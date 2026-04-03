@@ -1,10 +1,6 @@
 <article class="comment-item" style="margin-left: {{ $level * 1.2 }}rem;">
     <div class="comment-item__header">
-        @if ($comment->user?->profile_photo)
-            <img src="{{ asset($comment->user->profile_photo) }}" alt="{{ $comment->user->comment_name }}" class="comment-item__avatar">
-        @else
-            <div class="comment-item__avatar comment-item__avatar--placeholder">{{ strtoupper(substr($comment->user->comment_name ?? 'U', 0, 1)) }}</div>
-        @endif
+        <div class="comment-item__avatar comment-item__avatar--placeholder">{{ strtoupper(substr($comment->user->comment_name ?? 'U', 0, 1)) }}</div>
 
         <div>
             <p class="comment-item__name">{{ $comment->user->comment_name ?? 'Deleted user' }}</p>

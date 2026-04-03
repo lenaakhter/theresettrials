@@ -93,17 +93,12 @@ class ProfileController extends Controller
             $currentUsername = 'user_'.$user->id;
         }
 
-        $currentAvatarFocusX = old('avatar_focus_x', $user->avatar_focus_x ?? 50);
-        $currentAvatarFocusY = old('avatar_focus_y', $user->avatar_focus_y ?? 50);
-
         return view('profile.edit', [
             'user' => $user,
             'canEditUsername' => $canEditUsername,
             'nextUsernameChangeAt' => $nextUsernameChangeAt,
             'currentDisplayName' => $currentDisplayName,
             'currentUsername' => $currentUsername,
-            'currentAvatarFocusX' => $currentAvatarFocusX,
-            'currentAvatarFocusY' => $currentAvatarFocusY,
         ]);
     }
 
@@ -114,10 +109,6 @@ class ProfileController extends Controller
         $data = $request->validate([
             'display_name' => ['required', 'string', 'max:255'],
             'email_notifications_opt_in' => ['required', 'boolean'],
-            'profile_photo' => ['nullable', 'image', 'max:2048'],
-            'remove_profile_photo' => ['nullable', 'boolean'],
-            'avatar_focus_x' => ['nullable', 'numeric', 'between:0,100'],
-            'avatar_focus_y' => ['nullable', 'numeric', 'between:0,100'],
             'username' => ['required', 'string', 'min:3', 'max:30', 'regex:/^[A-Za-z0-9_]+$/', Rule::unique('users', 'username')->ignore($user->id)],
             'current_password' => ['nullable', 'required_with:password,password_confirmation', 'current_password'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
@@ -129,8 +120,6 @@ class ProfileController extends Controller
         $updatePayload = [
             'display_name' => trim($data['display_name']),
             'email_notifications_opt_in' => (bool) $data['email_notifications_opt_in'],
-            'avatar_focus_x' => (float) ($data['avatar_focus_x'] ?? $user->avatar_focus_x ?? 50),
-            'avatar_focus_y' => (float) ($data['avatar_focus_y'] ?? $user->avatar_focus_y ?? 50),
         ];
 
         $username = strtolower(trim($data['username']));
@@ -157,29 +146,6 @@ class ProfileController extends Controller
             $updatePayload['username_changed_at'] = now();
         }
 
-        if ($request->hasFile('profile_photo')) {
-            $directory = $this->avatarUploadDirectory();
-
-            if ($user->profile_photo) {
-                $this->deleteProfilePhotoFromKnownPublicRoots($user->profile_photo);
-            }
-
-            if (! is_dir($directory)) {
-                mkdir($directory, 0755, true);
-            }
-
-            $filename = 'avatar-'.$user->id.'-'.Str::uuid().'.'.$request->file('profile_photo')->getClientOriginalExtension();
-            $request->file('profile_photo')->move($directory, $filename);
-
-            $updatePayload['profile_photo'] = 'uploads/avatars/'.$filename;
-        } elseif (($data['remove_profile_photo'] ?? false) && $user->profile_photo) {
-            $this->deleteProfilePhotoFromKnownPublicRoots($user->profile_photo);
-
-            $updatePayload['profile_photo'] = null;
-            $updatePayload['avatar_focus_x'] = 50;
-            $updatePayload['avatar_focus_y'] = 50;
-        }
-
         if (! blank($data['password'] ?? null)) {
             $updatePayload['password'] = $data['password'];
         }
@@ -199,10 +165,6 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        if ($user->profile_photo) {
-            $this->deleteProfilePhotoFromKnownPublicRoots($user->profile_photo);
-        }
-
         // Clean up orphaned sessions and password reset tokens
         \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
         \Illuminate\Support\Facades\DB::table('password_reset_tokens')->where('email', $user->email)->delete();
@@ -214,35 +176,5 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/')->with('status', 'Your account has been deleted.');
-    }
-
-    private function avatarUploadDirectory(): string
-    {
-        $siteGroundPublicHtml = base_path('public_html');
-
-        if (is_dir($siteGroundPublicHtml)) {
-            return $siteGroundPublicHtml.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'avatars';
-        }
-
-        return public_path('uploads/avatars');
-    }
-
-    private function deleteProfilePhotoFromKnownPublicRoots(string $relativePath): void
-    {
-        $trimmedPath = ltrim($relativePath, '/\\');
-        $candidatePaths = [
-            public_path($trimmedPath),
-        ];
-
-        $siteGroundPublicHtml = base_path('public_html');
-        if (is_dir($siteGroundPublicHtml)) {
-            $candidatePaths[] = $siteGroundPublicHtml.DIRECTORY_SEPARATOR.str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $trimmedPath);
-        }
-
-        foreach (array_unique($candidatePaths) as $path) {
-            if (is_file($path)) {
-                @unlink($path);
-            }
-        }
     }
 }

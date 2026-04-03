@@ -161,22 +161,6 @@ class SubscriberManagementController extends Controller
                 ->with('error', 'Admin accounts cannot be deleted. Revoke admin access first.');
         }
 
-        if ($user->profile_photo) {
-            $trimmedPath = ltrim($user->profile_photo, '/\\');
-            $candidatePaths = [public_path($trimmedPath)];
-
-            $siteGroundPublicHtml = base_path('public_html');
-            if (is_dir($siteGroundPublicHtml)) {
-                $candidatePaths[] = $siteGroundPublicHtml.DIRECTORY_SEPARATOR.str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $trimmedPath);
-            }
-
-            foreach (array_unique($candidatePaths) as $photoPath) {
-                if (is_file($photoPath)) {
-                    @unlink($photoPath);
-                }
-            }
-        }
-
         $name = $user->name;
         // Clean up orphaned sessions and password reset tokens
         DB::table('sessions')->where('user_id', $user->id)->delete();

@@ -61,18 +61,9 @@
                     @endif
                 <div class="site-nav-account">
                     <a href="{{ route('profile.edit') }}" class="site-nav-account__trigger" aria-label="Account menu">
-                        @if(auth()->user()->profile_photo)
-                            <img
-                                src="{{ asset(auth()->user()->profile_photo) }}"
-                                alt="{{ auth()->user()->display_name ?: auth()->user()->name }}"
-                                class="site-nav-account__avatar"
-                                style="object-position: {{ auth()->user()->avatar_focus_x ?? 50 }}% {{ auth()->user()->avatar_focus_y ?? 50 }}%;"
-                            >
-                        @else
-                            <span class="site-nav-account__avatar site-nav-account__avatar--placeholder">
-                                {{ strtoupper(substr(auth()->user()->display_name ?: auth()->user()->name, 0, 1)) }}
-                            </span>
-                        @endif
+                        <span class="site-nav-account__avatar site-nav-account__avatar--placeholder">
+                            {{ strtoupper(substr(auth()->user()->display_name ?: auth()->user()->name, 0, 1)) }}
+                        </span>
                     </a>
 
                     <div class="site-nav-account__menu" aria-label="Account options">

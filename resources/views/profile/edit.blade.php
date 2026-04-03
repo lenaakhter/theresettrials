@@ -20,56 +20,14 @@
             </div>
         @endif
 
-        @php
-            $hasAvatar = ! old('remove_profile_photo') && filled($user->profile_photo);
-        @endphp
-
-        <form method="POST" action="{{ route('profile.update') }}" class="admin-form" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('profile.update') }}" class="admin-form">
             @csrf
             @method('PUT')
 
             <div class="profile-page__identity">
-                <div class="profile-page__avatar-wrap">
-                    <label for="profile_photo" class="profile-page__avatar-picker" title="Change profile photo">
-                        <span id="profile-avatar-placeholder" class="profile-page__avatar-layer {{ $hasAvatar ? 'profile-page__avatar-layer--hidden' : '' }}">
-                            <span class="profile-page__avatar-large profile-page__avatar-large--placeholder">
-                                {{ strtoupper(substr($user->display_name ?: $user->name, 0, 1)) }}
-                            </span>
-                        </span>
-
-                        <span id="profile-avatar-image-wrap" class="profile-page__avatar-layer {{ $hasAvatar ? '' : 'profile-page__avatar-layer--hidden' }}">
-                            <img
-                                src="{{ $hasAvatar ? asset($user->profile_photo) : '' }}"
-                                alt="Profile photo preview"
-                                class="profile-page__avatar-large"
-                                id="profile-avatar-preview"
-                                style="object-position: {{ $currentAvatarFocusX }}% {{ $currentAvatarFocusY }}%;"
-                            >
-                        </span>
-
-                    </label>
-
-                    <div class="profile-page__avatar-actions">
-                        <button type="button" class="profile-page__avatar-edit" id="profile-avatar-actions-toggle" aria-label="Profile photo options" aria-expanded="false">
-                            <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0l-1.96 1.96 3.75 3.75 2.13-1.79z"/>
-                            </svg>
-                        </button>
-
-                        <div class="profile-page__avatar-menu" id="profile-avatar-menu" hidden>
-                            <button type="button" class="profile-page__avatar-menu-btn" id="profile-avatar-upload-action">Upload photo</button>
-                            <button type="button" class="profile-page__avatar-menu-btn" id="profile-avatar-remove-action">Remove photo</button>
-                        </div>
-                    </div>
-                </div>
+                <span class="profile-page__identity-badge" aria-hidden="true">{{ strtoupper(substr($currentDisplayName, 0, 1)) }}</span>
 
                 <p class="profile-page__display-name">{{ $currentDisplayName }}</p>
-
-                <input id="profile_photo" name="profile_photo" type="file" accept="image/*" class="profile-page__file-input">
-                <input id="remove_profile_photo" name="remove_profile_photo" type="checkbox" value="1" class="profile-page__file-input" {{ old('remove_profile_photo') ? 'checked' : '' }}>
-                <input id="avatar_focus_x" name="avatar_focus_x" type="hidden" value="{{ $currentAvatarFocusX }}">
-                <input id="avatar_focus_y" name="avatar_focus_y" type="hidden" value="{{ $currentAvatarFocusY }}">
-                <p class="profile-page__avatar-help">Tap the avatar to upload. Drag the image inside the circle to reposition.</p>
             </div>
 
             <label for="display_name" class="admin-form__label">Display name</label>
@@ -148,24 +106,9 @@
                     <button type="submit" class="profile-page__inline-save-btn" hidden data-inline-save-btn>Save</button>
                 </div>
             </div>
+
+            <button type="submit" class="admin-form__button">Save profile changes</button>
         </form>
-
-        <div id="avatar-editor" class="avatar-editor" hidden>
-            <div class="avatar-editor__dialog" role="dialog" aria-modal="true" aria-labelledby="avatar-editor-title">
-                <button type="button" class="avatar-editor__close" id="avatar-editor-close" aria-label="Close preview">&times;</button>
-                <h2 id="avatar-editor-title" class="avatar-editor__title">Preview your profile photo</h2>
-                <p class="avatar-editor__subtitle">Drag the photo to position it in the circle.</p>
-
-                <div class="avatar-editor__circle" id="avatar-editor-circle">
-                    <span id="avatar-editor-placeholder" class="avatar-editor__placeholder">
-                        {{ strtoupper(substr($user->display_name ?: $user->name, 0, 1)) }}
-                    </span>
-                    <img id="avatar-editor-image" class="avatar-editor__image avatar-editor__image--hidden" src="" alt="Large avatar preview">
-                </div>
-
-                <button type="button" class="admin-form__button" id="avatar-editor-done">Use this photo</button>
-            </div>
-        </div>
 
         <div class="profile-danger-zone">
             <h2 class="profile-danger-zone__title">Delete Account</h2>
@@ -194,13 +137,17 @@
 @push('scripts')
 <script>
     (() => {
-        const input = document.getElementById('profile_photo');
         const emailNotifToggle = document.getElementById('email_notifications_opt_in');
         const emailNotifState = document.getElementById('email-notif-state');
-        const displayNameInput = document.getElementById('display_name');
-        const usernameInput = document.getElementById('username');
+        const profileForm = document.querySelector('form[action="{{ route('profile.update') }}"]');
         const profileToast = document.getElementById('profile-save-toast');
         const profileToastClose = document.getElementById('profile-save-toast-close');
+        const passwordFields = document.getElementById('password-fields');
+        const togglePasswordFields = document.getElementById('toggle-password-fields');
+
+        if (!emailNotifToggle || !emailNotifState || !profileForm || !passwordFields || !togglePasswordFields) {
+            return;
+        }
 
         if (profileToast && profileToastClose) {
             requestAnimationFrame(() => {
@@ -211,30 +158,6 @@
                 profileToast.classList.remove('is-visible');
                 profileToast.classList.add('is-hidden');
             });
-        }
-
-        const preview = document.getElementById('profile-avatar-preview');
-        const placeholderLayer = document.getElementById('profile-avatar-placeholder');
-        const imageLayer = document.getElementById('profile-avatar-image-wrap');
-        const focusXInput = document.getElementById('avatar_focus_x');
-        const focusYInput = document.getElementById('avatar_focus_y');
-        const profileForm = document.querySelector('form[action="{{ route('profile.update') }}"]');
-        const removeCheckbox = document.getElementById('remove_profile_photo');
-        const avatarActionsToggle = document.getElementById('profile-avatar-actions-toggle');
-        const avatarMenu = document.getElementById('profile-avatar-menu');
-        const uploadAction = document.getElementById('profile-avatar-upload-action');
-        const removeAction = document.getElementById('profile-avatar-remove-action');
-        const avatarEditor = document.getElementById('avatar-editor');
-        const avatarEditorCircle = document.getElementById('avatar-editor-circle');
-        const avatarEditorPlaceholder = document.getElementById('avatar-editor-placeholder');
-        const avatarEditorImage = document.getElementById('avatar-editor-image');
-        const avatarEditorDone = document.getElementById('avatar-editor-done');
-        const avatarEditorClose = document.getElementById('avatar-editor-close');
-        const passwordFields = document.getElementById('password-fields');
-        const togglePasswordFields = document.getElementById('toggle-password-fields');
-
-        if (!input || !preview || !focusXInput || !focusYInput || !profileForm || !emailNotifToggle || !emailNotifState || !displayNameInput || !usernameInput || !avatarEditor || !avatarEditorCircle || !avatarEditorImage || !avatarEditorDone || !avatarActionsToggle || !avatarMenu || !uploadAction || !removeAction || !avatarEditorPlaceholder || !removeCheckbox || !avatarEditorClose || !passwordFields || !togglePasswordFields) {
-            return;
         }
 
         const showInlineToast = (message, isError = false) => {
@@ -327,11 +250,6 @@
                     }
                 });
 
-                previousPreviewSrc = preview.getAttribute('src') || '';
-                previousFocusX = parseFloat(focusXInput.value || '50');
-                previousFocusY = parseFloat(focusYInput.value || '50');
-                previousRemoveChecked = removeCheckbox.checked;
-
                 showInlineToast(successMessage);
                 return true;
             } catch (error) {
@@ -342,11 +260,6 @@
             }
         };
 
-        profileForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            await submitProfileForm('Profile updated.');
-        });
-
         emailNotifToggle.addEventListener('change', async () => {
             updateNotifStateLabel();
             const didSave = await submitProfileForm('Notification preference saved.');
@@ -354,230 +267,6 @@
             if (!didSave) {
                 emailNotifToggle.checked = !emailNotifToggle.checked;
                 updateNotifStateLabel();
-            }
-        });
-
-        let isDragging = false;
-        let activePointerId = null;
-        let hasPendingSelection = false;
-        let previousPreviewSrc = preview.getAttribute('src') || '';
-        let previousFocusX = parseFloat(focusXInput.value || '50');
-        let previousFocusY = parseFloat(focusYInput.value || '50');
-        let previousRemoveChecked = removeCheckbox.checked;
-
-        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-        const applyFocus = (x, y) => {
-            const clampedX = clamp(x, 0, 100);
-            const clampedY = clamp(y, 0, 100);
-
-            focusXInput.value = clampedX.toFixed(2);
-            focusYInput.value = clampedY.toFixed(2);
-            preview.style.objectPosition = `${clampedX}% ${clampedY}%`;
-            avatarEditorImage.style.objectPosition = `${clampedX}% ${clampedY}%`;
-        };
-
-        const focusFromPointer = (event) => {
-            const rect = avatarEditorCircle.getBoundingClientRect();
-            const pointX = event.clientX ?? (event.touches && event.touches[0] ? event.touches[0].clientX : null);
-            const pointY = event.clientY ?? (event.touches && event.touches[0] ? event.touches[0].clientY : null);
-
-            if (pointX === null || pointY === null) {
-                return;
-            }
-
-            const relativeX = ((pointX - rect.left) / rect.width) * 100;
-            const relativeY = ((pointY - rect.top) / rect.height) * 100;
-            applyFocus(relativeX, relativeY);
-        };
-
-        const showPreviewImage = () => {
-            imageLayer.classList.remove('profile-page__avatar-layer--hidden');
-            placeholderLayer.classList.add('profile-page__avatar-layer--hidden');
-            avatarEditorImage.classList.remove('avatar-editor__image--hidden');
-            avatarEditorPlaceholder.classList.add('avatar-editor__placeholder--hidden');
-            removeAction.disabled = false;
-        };
-
-        const showPlaceholder = () => {
-            imageLayer.classList.add('profile-page__avatar-layer--hidden');
-            placeholderLayer.classList.remove('profile-page__avatar-layer--hidden');
-            avatarEditorImage.classList.add('avatar-editor__image--hidden');
-            avatarEditorPlaceholder.classList.remove('avatar-editor__placeholder--hidden');
-            removeAction.disabled = true;
-        };
-
-        const setRemovePhoto = (value) => {
-            removeCheckbox.checked = value;
-        };
-
-        const setMenuOpen = (open) => {
-            avatarMenu.hidden = !open;
-            avatarActionsToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        };
-
-        const openEditor = () => {
-            avatarEditor.hidden = false;
-            document.body.classList.add('is-avatar-editor-open');
-        };
-
-        const closeEditor = () => {
-            avatarEditor.hidden = true;
-            document.body.classList.remove('is-avatar-editor-open');
-            isDragging = false;
-            activePointerId = null;
-        };
-
-        const abortPendingSelection = () => {
-            if (!hasPendingSelection) {
-                closeEditor();
-                return;
-            }
-
-            preview.src = previousPreviewSrc;
-            avatarEditorImage.src = previousPreviewSrc;
-            applyFocus(previousFocusX, previousFocusY);
-            removeCheckbox.checked = previousRemoveChecked;
-
-            if (previousPreviewSrc) {
-                showPreviewImage();
-            } else {
-                showPlaceholder();
-            }
-
-            input.value = '';
-            hasPendingSelection = false;
-            closeEditor();
-        };
-
-        applyFocus(parseFloat(focusXInput.value || '50'), parseFloat(focusYInput.value || '50'));
-
-        if (preview.getAttribute('src')) {
-            avatarEditorImage.src = preview.getAttribute('src');
-            showPreviewImage();
-            setRemovePhoto(false);
-        } else {
-            showPlaceholder();
-        }
-
-        avatarActionsToggle.addEventListener('click', (event) => {
-            event.preventDefault();
-            setMenuOpen(avatarMenu.hidden);
-        });
-
-        uploadAction.addEventListener('click', () => {
-            setMenuOpen(false);
-            input.click();
-        });
-
-        removeAction.addEventListener('click', () => {
-            if (removeAction.disabled) {
-                return;
-            }
-
-            setMenuOpen(false);
-            closeEditor();
-            preview.src = '';
-            avatarEditorImage.src = '';
-            showPlaceholder();
-            applyFocus(50, 50);
-            setRemovePhoto(true);
-            input.value = '';
-            hasPendingSelection = false;
-            submitProfileForm('Profile photo removed.');
-        });
-
-        input.addEventListener('change', () => {
-            const [file] = input.files || [];
-
-            if (!file) {
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = (loadEvent) => {
-                previousPreviewSrc = preview.getAttribute('src') || '';
-                previousFocusX = parseFloat(focusXInput.value || '50');
-                previousFocusY = parseFloat(focusYInput.value || '50');
-                previousRemoveChecked = removeCheckbox.checked;
-
-                preview.src = loadEvent.target?.result || '';
-                avatarEditorImage.src = preview.src;
-                showPreviewImage();
-                applyFocus(50, 50);
-                setRemovePhoto(false);
-                hasPendingSelection = true;
-                openEditor();
-            };
-
-            reader.readAsDataURL(file);
-        });
-
-        avatarEditorCircle.addEventListener('pointerdown', (event) => {
-            if (!avatarEditorImage.getAttribute('src')) {
-                return;
-            }
-
-            event.preventDefault();
-            isDragging = true;
-            activePointerId = event.pointerId;
-            avatarEditorCircle.classList.add('is-dragging');
-            avatarEditorCircle.setPointerCapture(event.pointerId);
-            focusFromPointer(event);
-        });
-
-        avatarEditorCircle.addEventListener('pointermove', (event) => {
-            if (!isDragging || activePointerId !== event.pointerId) {
-                return;
-            }
-
-            event.preventDefault();
-            focusFromPointer(event);
-        });
-
-        avatarEditorCircle.addEventListener('pointerup', (event) => {
-            if (activePointerId !== event.pointerId) {
-                return;
-            }
-
-            isDragging = false;
-            activePointerId = null;
-            avatarEditorCircle.releasePointerCapture(event.pointerId);
-            avatarEditorCircle.classList.remove('is-dragging');
-        });
-
-        avatarEditorCircle.addEventListener('pointercancel', (event) => {
-            if (activePointerId !== event.pointerId) {
-                return;
-            }
-
-            isDragging = false;
-            activePointerId = null;
-            avatarEditorCircle.classList.remove('is-dragging');
-        });
-
-        avatarEditorDone.addEventListener('click', () => {
-            hasPendingSelection = false;
-            closeEditor();
-            submitProfileForm('Profile photo updated.');
-        });
-        avatarEditorClose.addEventListener('click', abortPendingSelection);
-
-        avatarEditor.addEventListener('click', (event) => {
-            if (event.target === avatarEditor) {
-                abortPendingSelection();
-            }
-        });
-
-        window.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && !avatarEditor.hidden) {
-                abortPendingSelection();
-            }
-        });
-
-        window.addEventListener('click', (event) => {
-            if (!avatarMenu.hidden && !event.target.closest('.profile-page__avatar-actions')) {
-                setMenuOpen(false);
             }
         });
 

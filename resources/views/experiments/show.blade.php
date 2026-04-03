@@ -158,6 +158,7 @@
                         if (countEl) {
                             const plural = data.likes_count === 1 ? 'like' : 'likes';
                             countEl.textContent = data.likes_count + ' ' + plural;
+                            countEl.setAttribute('data-liked', data.liked ? 'true' : 'false');
                         }
                     })
                     .catch(() => {

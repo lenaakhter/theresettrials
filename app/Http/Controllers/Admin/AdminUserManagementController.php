@@ -17,7 +17,13 @@ class AdminUserManagementController extends Controller
             ->take(8)
             ->get();
 
-        return view('admin.admins.create', compact('recentAdmins'));
+        $promotableUsers = User::query()
+            ->where('is_admin', false)
+            ->latest('created_at')
+            ->take(12)
+            ->get(['id', 'name', 'email']);
+
+        return view('admin.admins.create', compact('recentAdmins', 'promotableUsers'));
     }
 
     public function store(Request $request)
@@ -47,5 +53,26 @@ class AdminUserManagementController extends Controller
         $user->update(['is_admin' => false]);
 
         return redirect()->route('admin.admins.create')->with('status', "{$user->name}'s admin access has been revoked.");
+    }
+
+    public function promote(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'string', 'email:rfc,dns', 'max:255'],
+        ]);
+
+        $user = User::query()->where('email', $data['email'])->first();
+
+        if (! $user) {
+            return redirect()->route('admin.admins.create')->with('error', 'No account found with that email.');
+        }
+
+        if ($user->is_admin) {
+            return redirect()->route('admin.admins.create')->with('status', "{$user->name} already has admin access.");
+        }
+
+        $user->update(['is_admin' => true]);
+
+        return redirect()->route('admin.admins.create')->with('status', "{$user->name} is now an admin.");
     }
 }

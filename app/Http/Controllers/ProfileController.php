@@ -158,14 +158,10 @@ class ProfileController extends Controller
         }
 
         if ($request->hasFile('profile_photo')) {
-            $directory = public_path('uploads/avatars');
+            $directory = $this->avatarUploadDirectory();
 
             if ($user->profile_photo) {
-                $existingPhotoPath = public_path($user->profile_photo);
-
-                if (is_file($existingPhotoPath)) {
-                    @unlink($existingPhotoPath);
-                }
+                $this->deleteProfilePhotoFromKnownPublicRoots($user->profile_photo);
             }
 
             if (! is_dir($directory)) {
@@ -177,11 +173,7 @@ class ProfileController extends Controller
 
             $updatePayload['profile_photo'] = 'uploads/avatars/'.$filename;
         } elseif (($data['remove_profile_photo'] ?? false) && $user->profile_photo) {
-            $existingPhotoPath = public_path($user->profile_photo);
-
-            if (is_file($existingPhotoPath)) {
-                @unlink($existingPhotoPath);
-            }
+            $this->deleteProfilePhotoFromKnownPublicRoots($user->profile_photo);
 
             $updatePayload['profile_photo'] = null;
             $updatePayload['avatar_focus_x'] = 50;
@@ -208,10 +200,7 @@ class ProfileController extends Controller
         $user = $request->user();
 
         if ($user->profile_photo) {
-            $photoPath = public_path($user->profile_photo);
-            if (is_file($photoPath)) {
-                @unlink($photoPath);
-            }
+            $this->deleteProfilePhotoFromKnownPublicRoots($user->profile_photo);
         }
 
         // Clean up orphaned sessions and password reset tokens
@@ -225,5 +214,35 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/')->with('status', 'Your account has been deleted.');
+    }
+
+    private function avatarUploadDirectory(): string
+    {
+        $siteGroundPublicHtml = base_path('public_html');
+
+        if (is_dir($siteGroundPublicHtml)) {
+            return $siteGroundPublicHtml.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'avatars';
+        }
+
+        return public_path('uploads/avatars');
+    }
+
+    private function deleteProfilePhotoFromKnownPublicRoots(string $relativePath): void
+    {
+        $trimmedPath = ltrim($relativePath, '/\\');
+        $candidatePaths = [
+            public_path($trimmedPath),
+        ];
+
+        $siteGroundPublicHtml = base_path('public_html');
+        if (is_dir($siteGroundPublicHtml)) {
+            $candidatePaths[] = $siteGroundPublicHtml.DIRECTORY_SEPARATOR.str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $trimmedPath);
+        }
+
+        foreach (array_unique($candidatePaths) as $path) {
+            if (is_file($path)) {
+                @unlink($path);
+            }
+        }
     }
 }

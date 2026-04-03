@@ -159,6 +159,7 @@ Route::prefix('adminslair')->name('admin.')->group(function () {
         Route::delete('/subscribers/users/{user}', [SubscriberManagementController::class, 'destroy'])->name('subscribers.destroy');
         Route::get('/admins/create', [AdminUserManagementController::class, 'create'])->name('admins.create');
         Route::post('/admins', [AdminUserManagementController::class, 'store'])->name('admins.store');
+        Route::post('/admins/promote', [AdminUserManagementController::class, 'promote'])->name('admins.promote');
         Route::delete('/admins/{user}', [AdminUserManagementController::class, 'destroy'])->name('admins.destroy');
         Route::get('/experiments/{experiment}/add-entry', [AdminExperimentController::class, 'addEntry'])->name('experiments.add-entry');
         Route::post('/experiments/{experiment}/entries', [AdminExperimentController::class, 'storeEntry'])->name('experiments.store-entry');

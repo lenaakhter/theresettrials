@@ -37,7 +37,10 @@
 
         @php
             $contentBlocks = $post->contentBlocksWithAnchors();
-            $tocItems = collect($contentBlocks)->where('type', 'heading')->values();
+            $tocItems = collect($contentBlocks)
+                ->where('type', 'heading')
+                ->filter(fn ($item) => !\Illuminate\Support\Str::contains((string) ($item['text'] ?? ''), 'tiktok', true))
+                ->values();
         @endphp
 
         @if ($tocItems->isNotEmpty())
@@ -154,6 +157,7 @@ document.addEventListener('click', (event) => {
         if (countEl) {
             const plural = data.likes_count === 1 ? 'like' : 'likes';
             countEl.textContent = `${data.likes_count} ${plural}`;
+            countEl.setAttribute('data-liked', data.liked ? 'true' : 'false');
         }
     })
     .catch(err => console.error('Error toggling like:', err));

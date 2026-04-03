@@ -31,23 +31,43 @@
         @endif
 
         <section class="admin-layout">
-            <form method="POST" action="{{ route('admin.admins.store') }}" class="admin-editor admin-form">
-                @csrf
+            <div class="admin-editor-stack">
+                <form method="POST" action="{{ route('admin.admins.store') }}" class="admin-editor admin-form">
+                    @csrf
 
-                <label for="name" class="admin-form__label">Name</label>
-                <input id="name" name="name" type="text" value="{{ old('name') }}" required class="admin-form__input">
+                    <label for="name" class="admin-form__label">Name</label>
+                    <input id="name" name="name" type="text" value="{{ old('name') }}" required class="admin-form__input">
 
-                <label for="email" class="admin-form__label">Email</label>
-                <input id="email" name="email" type="email" value="{{ old('email') }}" required class="admin-form__input" autocomplete="email">
+                    <label for="email" class="admin-form__label">Email</label>
+                    <input id="email" name="email" type="email" value="{{ old('email') }}" required class="admin-form__input" autocomplete="email">
 
-                <label for="password" class="admin-form__label">Password</label>
-                <input id="password" name="password" type="password" required class="admin-form__input" autocomplete="new-password">
+                    <label for="password" class="admin-form__label">Password</label>
+                    <input id="password" name="password" type="password" required class="admin-form__input" autocomplete="new-password">
 
-                <label for="password_confirmation" class="admin-form__label">Confirm Password</label>
-                <input id="password_confirmation" name="password_confirmation" type="password" required class="admin-form__input" autocomplete="new-password">
+                    <label for="password_confirmation" class="admin-form__label">Confirm Password</label>
+                    <input id="password_confirmation" name="password_confirmation" type="password" required class="admin-form__input" autocomplete="new-password">
 
-                <button type="submit" class="admin-form__button">Create Admin</button>
-            </form>
+                    <button type="submit" class="admin-form__button">Create Admin</button>
+                </form>
+
+                <form method="POST" action="{{ route('admin.admins.promote') }}" class="admin-editor admin-form">
+                    @csrf
+
+                    <h2 class="admin-recent__title" style="margin: 0;">Promote Existing Account</h2>
+                    <p class="admin-posts__subtitle" style="margin: 0.2rem 0 0.6rem;">Enter an existing user email to grant admin access.</p>
+
+                    <label for="promote_email" class="admin-form__label">Existing User Email</label>
+                    <input id="promote_email" name="email" type="email" value="{{ old('email') }}" list="promotable-users" required class="admin-form__input" autocomplete="email">
+
+                    <datalist id="promotable-users">
+                        @foreach ($promotableUsers as $candidate)
+                            <option value="{{ $candidate->email }}">{{ $candidate->name }}</option>
+                        @endforeach
+                    </datalist>
+
+                    <button type="submit" class="admin-form__button">Promote To Admin</button>
+                </form>
+            </div>
 
             <aside class="admin-recent">
                 <h2 class="admin-recent__title">Recent Admins</h2>

@@ -15,7 +15,7 @@
     <p class="comment-item__body">{{ $comment->content }}</p>
 
     <div class="comment-item__actions">
-        <p class="comment-item__likes" data-like-count="{{ $comment->id }}">{{ $comment->likes_count }} {{ $comment->likes_count === 1 ? 'like' : 'likes' }}</p>
+        <p class="comment-item__likes" data-like-count="{{ $comment->id }}" data-liked="{{ in_array($comment->id, $likedCommentIds ?? [], true) ? 'true' : 'false' }}">{{ $comment->likes_count }} {{ $comment->likes_count === 1 ? 'like' : 'likes' }}</p>
 
         @auth
             <button type="button" class="comment-item__heart" data-like-btn="{{ $comment->id }}" data-like-url="{{ route('comments.like', $comment) }}" data-liked="{{ in_array($comment->id, $likedCommentIds ?? [], true) ? 'true' : 'false' }}" aria-label="Like comment"></button>

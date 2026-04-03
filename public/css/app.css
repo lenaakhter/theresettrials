@@ -1460,7 +1460,8 @@ base colours
 
 .post-single__toc-list {
     margin: 0;
-    padding-left: 1rem;
+    padding-left: 0;
+    list-style: none;
 }
 
 .post-single__toc-item {
@@ -1487,11 +1488,13 @@ base colours
 
 .post-single__embed-wrap {
     margin: 1.3rem 0;
+    display: flex;
+    justify-content: center;
 }
 
 .post-single__tiktok {
-    width: min(100%, 360px);
-    height: 640px;
+    width: min(100%, 300px);
+    height: 540px;
     border: 0;
     border-radius: 14px;
     box-shadow: 0 12px 26px rgba(0, 0, 0, 0.14);
@@ -4587,35 +4590,57 @@ body.is-avatar-editor-open {
     width: 5.6rem;
     flex: 0 0 5.6rem;
     font-variant-numeric: tabular-nums;
+    transition: color 160ms ease, font-weight 160ms ease;
+}
+
+.experiment-comments .comment-item__likes[data-liked="true"],
+.comments-section .comment-item__likes[data-liked="true"] {
+    color: #b24663;
+    font-weight: 700;
 }
 
 .experiment-comments .comment-item__heart,
 .comments-section .comment-item__heart {
-    width: 2rem;
-    padding: 0.2rem;
+    width: 1.7rem;
+    height: 1.7rem;
+    padding: 0;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-radius: 999px;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transition: transform 140ms ease;
 }
 
 .experiment-comments .comment-item__heart::before,
 .comments-section .comment-item__heart::before {
-    content: '♡';
-    font-size: 1.45rem;
-    line-height: 1;
-    color: #8C7B7F;
+    content: '';
+    width: 1.18rem;
+    height: 1.18rem;
+    display: block;
+    transition: opacity 140ms ease;
+    opacity: 0.95;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23c2b2b8'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z'/%3E%3C/svg%3E");
+}
+
+.experiment-comments .comment-item__heart:hover,
+.comments-section .comment-item__heart:hover {
+    transform: translateY(-1px);
 }
 
 .experiment-comments .comment-item__heart[data-liked="true"]::before,
 .comments-section .comment-item__heart[data-liked="true"]::before {
-    content: '♡';
-    color: #c56a7f;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23a84f66'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z'/%3E%3C/svg%3E");
 }
 
 .experiment-comments .comment-item__heart[data-liked="true"],
 .comments-section .comment-item__heart[data-liked="true"] {
-    background: #f8e8ee;
+    background: transparent;
+    box-shadow: none;
 }
 
 

@@ -7,6 +7,7 @@ use App\Mail\AccountBannedMail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -54,7 +55,12 @@ class SubscriberManagementController extends Controller
             'ban_duration_hours' => $hours,
             'ban_started_at' => now(),
             'ban_reason' => $reason,
+            // Rotate remember token so persistent login cookies are invalidated.
+            'remember_token' => Str::random(60),
         ]);
+
+        // Force immediate logout for active sessions.
+        DB::table('sessions')->where('user_id', $user->id)->delete();
 
         $appealUrl = route('ban.appeal.create', [
             'ban_id' => $banId,
@@ -156,16 +162,25 @@ class SubscriberManagementController extends Controller
         }
 
         if ($user->profile_photo) {
-            $photoPath = public_path($user->profile_photo);
-            if (is_file($photoPath)) {
-                @unlink($photoPath);
+            $trimmedPath = ltrim($user->profile_photo, '/\\');
+            $candidatePaths = [public_path($trimmedPath)];
+
+            $siteGroundPublicHtml = base_path('public_html');
+            if (is_dir($siteGroundPublicHtml)) {
+                $candidatePaths[] = $siteGroundPublicHtml.DIRECTORY_SEPARATOR.str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $trimmedPath);
+            }
+
+            foreach (array_unique($candidatePaths) as $photoPath) {
+                if (is_file($photoPath)) {
+                    @unlink($photoPath);
+                }
             }
         }
 
         $name = $user->name;
         // Clean up orphaned sessions and password reset tokens
-        \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
-        \Illuminate\Support\Facades\DB::table('password_reset_tokens')->where('email', $user->email)->delete();
+        DB::table('sessions')->where('user_id', $user->id)->delete();
+        DB::table('password_reset_tokens')->where('email', $user->email)->delete();
 
         $user->delete();
 

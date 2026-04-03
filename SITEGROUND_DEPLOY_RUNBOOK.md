@@ -38,6 +38,9 @@ rm ~/www/theresettrials.com/deploy.tar.gz
 # Safety pre-checks (verify production is using the expected DB/session setup)
 php artisan tinker --execute="echo 'DB: '.config('database.default').PHP_EOL; echo 'SESSION: '.config('session.driver').PHP_EOL;"
 
+# Stop immediately if DB is not mysql/mariadb (prevents writing to wrong DB like sqlite)
+php artisan tinker --execute="if (!in_array(config('database.default'), ['mysql','mariadb'], true)) { echo 'ABORT: unexpected DB connection'.PHP_EOL; exit(1);}"
+
 composer install --no-dev --optimize-autoloader
 php artisan migrate --force
 

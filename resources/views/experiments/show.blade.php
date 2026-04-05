@@ -4,7 +4,7 @@
 <section class="experiment-timeline">
     <div class="experiment-timeline__header">
         <h1 class="experiment-timeline__title">{{ $experiment->title }}</h1>
-        <p style="color: #8C7B7F; margin: 0.5rem 0 0;">{{ $experiment->description }}</p>
+        <p style="color: #8C7B7F; margin: 0.5rem 0 0;">{!! nl2br(e($experiment->description)) !!}</p>
     </div>
 
 
@@ -52,7 +52,7 @@
             @forelse($experiment->entries as $entry)
                 <div class="experiment-timeline__update-item">
                     <span class="experiment-timeline__update-type">{{ $entry->type }}</span>
-                    <p class="experiment-timeline__update-content">{{ $entry->content }}</p>
+                    <p class="experiment-timeline__update-content">{!! nl2br(e($entry->content)) !!}</p>
                     <p class="experiment-timeline__update-meta">{{ $entry->entry_date->format('F d, Y') }}</p>
                 </div>
             @empty

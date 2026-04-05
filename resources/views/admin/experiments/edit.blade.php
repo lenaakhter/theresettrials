@@ -76,11 +76,18 @@
                             <p class="admin-resource-card__name">{{ $resource->name }}</p>
                             <a href="{{ $resource->product_url }}" target="_blank" rel="noopener noreferrer" class="admin-resource-card__link">View product</a>
                         </div>
-                        <form method="POST" action="{{ route('admin.resources.destroy-inline', $resource) }}" onsubmit="return confirm('Unlink this product?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="admin-resource-card__delete" title="Unlink">&times;</button>
-                        </form>
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <form method="POST" action="{{ route('admin.resources.destroy-inline', $resource) }}" onsubmit="return confirm('Unlink this product?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="admin-resource-card__delete" title="Unlink">&times;</button>
+                            </form>
+                            <form method="POST" action="{{ route('admin.resources.destroy', $resource) }}" onsubmit="return confirm('Delete this resource everywhere? This cannot be undone.')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="admin-btn admin-btn--sm admin-btn--danger">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 @endforeach
             </div>

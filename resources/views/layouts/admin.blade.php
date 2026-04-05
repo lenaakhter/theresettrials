@@ -60,6 +60,38 @@
                 notice.remove();
             }
         });
+
+        const adminDropdowns = document.querySelectorAll('.admin-nav-dropdown');
+
+        const closeAdminDropdown = (dropdown) => {
+            if (dropdown?.hasAttribute('open')) {
+                dropdown.removeAttribute('open');
+            }
+        };
+
+        adminDropdowns.forEach((dropdown) => {
+            dropdown.addEventListener('mouseleave', () => closeAdminDropdown(dropdown));
+
+            dropdown.addEventListener('toggle', () => {
+                if (!dropdown.open) {
+                    return;
+                }
+
+                adminDropdowns.forEach((otherDropdown) => {
+                    if (otherDropdown !== dropdown) {
+                        closeAdminDropdown(otherDropdown);
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (event.target.closest('.admin-nav-dropdown')) {
+                return;
+            }
+
+            adminDropdowns.forEach((dropdown) => closeAdminDropdown(dropdown));
+        });
     </script>
     @stack('scripts')
 </body>

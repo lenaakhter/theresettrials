@@ -38,7 +38,7 @@ class Resource extends Model
 
         $trimmedPath = ltrim($path, '/');
 
-        if (preg_match('#(?:^|/)(images/uploads/resources/[^?#]+)$#i', $trimmedPath, $matches) !== 1) {
+        if (preg_match('~(?:^|/)(images/uploads/resources/[^?]+)$~i', $trimmedPath, $matches) !== 1) {
             return null;
         }
 

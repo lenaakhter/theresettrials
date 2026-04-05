@@ -46,8 +46,9 @@ ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=6 -i "$env:USERPROFILE\.ssh
 
 ```bash
 cd ~/www/theresettrials.com/laravel-app
+ls -lh ~/www/theresettrials.com/deploy.tar.gz
 tar -xzf ~/www/theresettrials.com/deploy.tar.gz
-rm ~/www/theresettrials.com/deploy.tar.gz
+rm -f ~/www/theresettrials.com/deploy.tar.gz
 
 # Safety pre-checks (verify production is using the expected DB/session setup)
 php artisan tinker --execute="echo 'DB: '.config('database.default').PHP_EOL; echo 'SESSION: '.config('session.driver').PHP_EOL;"

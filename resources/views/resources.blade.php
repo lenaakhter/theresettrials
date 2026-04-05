@@ -15,7 +15,10 @@
                 <h3 class="product-box__title">Currently Testing</h3>
                 <div class="product-box__list">
                     @foreach ($currentlyTesting as $res)
-                        <a href="{{ route('experiments.show', $res->linkable) }}" class="product-box__item">
+                        @php
+                            $experimentLink = $res->linkable ? route('experiments.show', $res->linkable) : $res->product_url;
+                        @endphp
+                        <a href="{{ $experimentLink }}" class="product-box__item">
                             @if ($res->image_url)
                                 <img src="{{ $res->image_url }}" alt="{{ $res->name }}" class="product-box__img">
                             @endif
@@ -46,12 +49,15 @@
                                 @php
                                     $linked = $resource->linkable;
                                     $isPost = $linked instanceof \App\Models\Post;
+                                    $isExperiment = $linked instanceof \App\Models\Experiment;
                                     $linkedUrl = $isPost
                                         ? route('posts.show', $linked->slug)
-                                        : route('experiments.show', $linked);
-                                    $linkedLabel = $isPost ? 'Read the blog post' : 'See the experiment';
+                                        : ($isExperiment ? route('experiments.show', $linked) : null);
+                                    $linkedLabel = $isPost ? 'Read the blog post' : ($isExperiment ? 'See the experiment' : null);
                                 @endphp
-                                <a href="{{ $linkedUrl }}" class="resource-card__linked-label">{{ $linkedLabel }} →</a>
+                                @if ($linkedUrl && $linkedLabel)
+                                    <a href="{{ $linkedUrl }}" class="resource-card__linked-label">{{ $linkedLabel }} →</a>
+                                @endif
                             @endif
                         </div>
                     </div>

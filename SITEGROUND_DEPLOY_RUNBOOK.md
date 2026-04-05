@@ -1,6 +1,7 @@
 # SiteGround Deploy Runbook
 
 Use these commands in this exact order.
+Run PowerShell commands one line at a time. Do not paste unfinished `{ ... }` blocks unless they are written on a single line.
 
 ## 1) Local machine (PowerShell)
 
@@ -18,8 +19,12 @@ If there is nothing to commit, skip the commit command and continue.
 Create deploy archive and upload to SiteGround:
 
 ```powershell
+npm ci
+npm run build
 git archive --format=tar.gz -o deploy.tar.gz HEAD
 scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 .\deploy.tar.gz u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/deploy.tar.gz
+ssh -i "$env:USERPROFILE\.ssh\lena_new" -p 18765 u3012-emeadboaxb0v@ssh.theresettrials.com "mkdir -p ~/www/theresettrials.com/public_html/build"
+scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\build u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/
 ```
 
 If you created or changed post cover images or resource images locally, upload those separately too.
@@ -28,12 +33,8 @@ If you created or changed post cover images or resource images locally, upload t
 ```powershell
 ssh -i "$env:USERPROFILE\.ssh\lena_new" -p 18765 u3012-emeadboaxb0v@ssh.theresettrials.com "mkdir -p ~/www/theresettrials.com/public_html/images/uploads"
 ssh -i "$env:USERPROFILE\.ssh\lena_new" -p 18765 u3012-emeadboaxb0v@ssh.theresettrials.com "mkdir -p ~/www/theresettrials.com/public_html/images/uploads/resources"
-if (Test-Path .\public\images\uploads\posts) {
-	scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\posts u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/
-}
-if (Test-Path .\public\images\uploads\resources) {
-	scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\resources u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/
-}
+if (Test-Path .\public\images\uploads\posts) { scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\posts u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/ }
+if (Test-Path .\public\images\uploads\resources) { scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\resources u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/ }
 ```
 
 ## 2) Connect to SiteGround
@@ -66,13 +67,9 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-npm ci
-npm run build
-rsync -av --delete public/build/ ~/www/theresettrials.com/public_html/build/
 rsync -av public/css/ ~/www/theresettrials.com/public_html/css/
 rsync -av --exclude 'uploads/' public/images/ ~/www/theresettrials.com/public_html/images/
-# If you changed local uploads and did not run the earlier scp step, sync resource uploads too:
-# rsync -av public/images/uploads/resources/ ~/www/theresettrials.com/public_html/images/uploads/resources/
+# Vite build is done locally and uploaded from Windows because SiteGround can run out of memory on npm run build.
 ```
 
 ## 4) Exit

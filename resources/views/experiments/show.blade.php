@@ -54,6 +54,13 @@
                     <span class="experiment-timeline__update-type">{{ $entry->type }}</span>
                     <p class="experiment-timeline__update-content">{!! nl2br(e($entry->content)) !!}</p>
                     <p class="experiment-timeline__update-meta">{{ $entry->entry_date->format('F d, Y') }}</p>
+                    @if(auth()->user() && auth()->user()->is_admin)
+                        <form action="{{ route('admin.experiments.destroy-entry', [$experiment, $entry]) }}" method="POST" onsubmit="return confirm('Delete this entry? This cannot be undone.');" style="margin-top: 0.75rem;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="background: #f5d3db; color: #7a2438; border: 1px solid #e6aebc; border-radius: 6px; padding: 0.4rem 0.7rem; font-weight: 700; cursor: pointer; font-family: 'Quicksand', sans-serif;">Delete Entry</button>
+                        </form>
+                    @endif
                 </div>
             @empty
             @endforelse

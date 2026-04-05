@@ -33,6 +33,17 @@ class ExperimentController extends Controller
         return redirect()->route('experiments.show', $experiment)->with('success', 'Entry added successfully!');
     }
 
+    public function destroyEntry(Experiment $experiment, ExperimentEntry $entry)
+    {
+        if ((int) $entry->experiment_id !== (int) $experiment->id) {
+            abort(404);
+        }
+
+        $entry->delete();
+
+        return redirect()->route('experiments.show', $experiment)->with('success', 'Entry deleted successfully!');
+    }
+
     public function index()
     {
         $experiments = Experiment::all();

@@ -62,6 +62,7 @@
         });
 
         const adminDropdowns = document.querySelectorAll('.admin-nav-dropdown');
+        const dropdownCloseTimers = new WeakMap();
 
         const closeAdminDropdown = (dropdown) => {
             if (dropdown?.hasAttribute('open')) {
@@ -69,8 +70,25 @@
             }
         };
 
+        const clearDropdownCloseTimer = (dropdown) => {
+            const timerId = dropdownCloseTimers.get(dropdown);
+            if (!timerId) {
+                return;
+            }
+
+            window.clearTimeout(timerId);
+            dropdownCloseTimers.delete(dropdown);
+        };
+
+        const scheduleDropdownClose = (dropdown) => {
+            clearDropdownCloseTimer(dropdown);
+            const timerId = window.setTimeout(() => closeAdminDropdown(dropdown), 180);
+            dropdownCloseTimers.set(dropdown, timerId);
+        };
+
         adminDropdowns.forEach((dropdown) => {
-            dropdown.addEventListener('mouseleave', () => closeAdminDropdown(dropdown));
+            dropdown.addEventListener('mouseenter', () => clearDropdownCloseTimer(dropdown));
+            dropdown.addEventListener('mouseleave', () => scheduleDropdownClose(dropdown));
 
             dropdown.addEventListener('toggle', () => {
                 if (!dropdown.open) {
@@ -79,6 +97,7 @@
 
                 adminDropdowns.forEach((otherDropdown) => {
                     if (otherDropdown !== dropdown) {
+                        clearDropdownCloseTimer(otherDropdown);
                         closeAdminDropdown(otherDropdown);
                     }
                 });
@@ -90,7 +109,10 @@
                 return;
             }
 
-            adminDropdowns.forEach((dropdown) => closeAdminDropdown(dropdown));
+            adminDropdowns.forEach((dropdown) => {
+                clearDropdownCloseTimer(dropdown);
+                closeAdminDropdown(dropdown);
+            });
         });
     </script>
     @stack('scripts')

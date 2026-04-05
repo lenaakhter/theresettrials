@@ -14,11 +14,35 @@ class Resource extends Model
             return null;
         }
 
+        $value = trim($value);
+
         if (preg_match('/^(https?:)?\/\//i', $value)) {
+            $normalizedPath = $this->extractResourceUploadPathFromUrl($value);
+            if ($normalizedPath !== null) {
+                return asset($normalizedPath);
+            }
+
             return $value;
         }
 
         return asset(ltrim($value, '/'));
+    }
+
+    private function extractResourceUploadPathFromUrl(string $url): ?string
+    {
+        $path = parse_url($url, PHP_URL_PATH);
+
+        if (! is_string($path) || $path === '') {
+            return null;
+        }
+
+        $trimmedPath = ltrim($path, '/');
+
+        if (preg_match('#(?:^|/)(images/uploads/resources/[^?#]+)$#i', $trimmedPath, $matches) !== 1) {
+            return null;
+        }
+
+        return $matches[1];
     }
 
     public function getRawImagePath(): ?string

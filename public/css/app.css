@@ -913,6 +913,10 @@ base colours
 .resource-card__img-link {
     display: block;
     background: #faf5f7;
+    height: 196px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .resource-card__img {
@@ -920,6 +924,18 @@ base colours
     height: 180px;
     object-fit: contain;
     padding: 0.75rem;
+}
+
+.resource-card__img-link--placeholder {
+    background: linear-gradient(180deg, #faf5f7 0%, #f6ebef 100%);
+}
+
+.resource-card__img-placeholder {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ad8a95;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
 }
 
 .resource-card__body {
@@ -935,6 +951,7 @@ base colours
     font-weight: 600;
     color: #3a2932;
     margin: 0;
+    min-height: 2.5em;
 }
 
 .resource-card__buy-link {
@@ -946,7 +963,7 @@ base colours
     padding: 0.35rem 0.85rem;
     border-radius: 20px;
     text-decoration: none;
-    margin-top: 0.25rem;
+    margin-top: auto;
     align-self: flex-start;
     transition: background 0.2s;
 }

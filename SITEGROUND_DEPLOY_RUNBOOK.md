@@ -28,8 +28,12 @@ If you created or changed post cover images or resource images locally, upload t
 ```powershell
 ssh -i "$env:USERPROFILE\.ssh\lena_new" -p 18765 u3012-emeadboaxb0v@ssh.theresettrials.com "mkdir -p ~/www/theresettrials.com/public_html/images/uploads"
 ssh -i "$env:USERPROFILE\.ssh\lena_new" -p 18765 u3012-emeadboaxb0v@ssh.theresettrials.com "mkdir -p ~/www/theresettrials.com/public_html/images/uploads/resources"
-scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\posts u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/
-scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\resources u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/
+if (Test-Path .\public\images\uploads\posts) {
+	scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\posts u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/
+}
+if (Test-Path .\public\images\uploads\resources) {
+	scp -i "$env:USERPROFILE\.ssh\lena_new" -P 18765 -r .\public\images\uploads\resources u3012-emeadboaxb0v@ssh.theresettrials.com:~/www/theresettrials.com/public_html/images/uploads/
+}
 ```
 
 ## 2) Connect to SiteGround

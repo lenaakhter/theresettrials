@@ -32,11 +32,13 @@
             <div class="resource-grid resources-page__grid">
                 @foreach ($resources as $resource)
                     <div class="resource-card">
-                        @if ($resource->image_url)
-                            <a href="{{ $resource->product_url }}" target="_blank" rel="noopener" class="resource-card__img-link">
+                        <a href="{{ $resource->product_url }}" target="_blank" rel="noopener" class="resource-card__img-link{{ $resource->image_url ? '' : ' resource-card__img-link--placeholder' }}">
+                            @if ($resource->image_url)
                                 <img src="{{ $resource->image_url }}" alt="{{ $resource->name }}" class="resource-card__img">
-                            </a>
-                        @endif
+                            @else
+                                <span class="resource-card__img-placeholder" aria-hidden="true">No image</span>
+                            @endif
+                        </a>
                         <div class="resource-card__body">
                             <h3 class="resource-card__name">{{ $resource->name }}</h3>
                             <a href="{{ $resource->product_url }}" target="_blank" rel="noopener" class="resource-card__buy-link">View product →</a>
